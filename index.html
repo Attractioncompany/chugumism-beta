@@ -549,6 +549,7 @@ function renderResult(){
    <div class="sec"><h3>🌉 방향 제안</h3>${bridge}</div>
    ${gapNote}
    <div class="sec"><h3>✨ ${W.name}에 다가가는 첫걸음</h3><p><b>유지·강화:</b> ${wKeep}<br><b>스타일:</b> ${wStyle}</p></div>
+   <button class="btn" style="background:linear-gradient(90deg,#B76BA3,#4A2B5C)" onclick="shareCard()">💌 내 추구미 카드 공유하기</button>
    <div class="sec"><h3>이 결과, 어땠나요?</h3>
      <div class="fb"><button id="fbY" onclick="fb(1)">👍 나 같아요</button><button id="fbN" onclick="fb(0)">🤔 갸우뚱해요</button></div>
      <div id="selfPickBox" style="display:none;margin-top:10px">
@@ -595,6 +596,57 @@ function saveLog(){
    <button class="btn ghost" onclick="location.reload()">처음부터 다시</button>
    <button class="btn ghost" onclick="adminExport()" style="margin-top:20px;opacity:.4">· · ·</button></div>`;
 }
+async function shareCard(){
+  track("share_card_click",{});
+  const wr=topTwo(scoreWant); const W=TYPES[wr[0][0]];
+  const c=document.createElement("canvas"); c.width=1080; c.height=1350;
+  const x=c.getContext("2d");
+  // 배경: 타입 그라디언트
+  const g=x.createLinearGradient(0,0,1080,1350);
+  g.addColorStop(0,W.color); g.addColorStop(1,shade(W.color));
+  x.fillStyle=g; x.fillRect(0,0,1080,1350);
+  // 은은한 상단 광
+  const g2=x.createRadialGradient(540,200,50,540,200,700);
+  g2.addColorStop(0,"rgba(255,255,255,.25)"); g2.addColorStop(1,"rgba(255,255,255,0)");
+  x.fillStyle=g2; x.fillRect(0,0,1080,900);
+  // 구미 (젤리 blob)
+  x.save(); x.translate(540,430);
+  x.fillStyle="rgba(255,255,255,.92)";
+  x.beginPath();
+  x.ellipse(0,0,150,140,0,0,Math.PI*2); x.fill();
+  x.fillStyle="#2B2233";
+  x.beginPath(); x.arc(-45,-15,14,0,Math.PI*2); x.fill();
+  x.beginPath(); x.arc(45,-15,14,0,Math.PI*2); x.fill();
+  x.strokeStyle="#2B2233"; x.lineWidth=7; x.lineCap="round";
+  x.beginPath(); x.arc(0,15,26,0.15*Math.PI,0.85*Math.PI); x.stroke();
+  x.restore();
+  // 텍스트
+  x.textAlign="center"; x.fillStyle="rgba(255,255,255,.85)";
+  x.font="500 40px Pretendard, sans-serif";
+  x.fillText("나의 추구미는", 540, 680);
+  x.fillStyle="#fff"; x.font="800 130px Pretendard, sans-serif";
+  x.fillText(W.name, 540, 830);
+  x.fillStyle="rgba(255,255,255,.92)"; x.font="500 38px Pretendard, sans-serif";
+  const one=g_plain(W.one).replace(/이에요\.?$/,"").slice(0,26);
+  x.fillText(one, 540, 920);
+  x.fillStyle="rgba(255,255,255,.75)"; x.font="600 34px Pretendard, sans-serif";
+  x.fillText(W.pc+" · 추구미즘 베타", 540, 1010);
+  // 하단 CTA
+  x.fillStyle="rgba(0,0,0,.22)"; 
+  if(x.roundRect){ x.beginPath(); x.roundRect(240,1140,600,90,45); x.fill(); } else { x.fillRect(240,1140,600,90); }
+  x.fillStyle="#fff"; x.font="600 36px Pretendard, sans-serif";
+  x.fillText("나도 해보기 · 추구미즘", 540, 1198);
+  // 공유/다운로드
+  c.toBlob(async b=>{
+    const file=new File([b],"추구미즘_"+W.name+".png",{type:"image/png"});
+    if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+      try{ await navigator.share({files:[file], text:"내 추구미는 "+W.name+"! 너도 해봐 → https://attractioncompany.github.io/chugumism-beta/?src=card"}); track("result_shared",{via:"native"}); return; }catch(e){}
+    }
+    const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="추구미즘_"+W.name+".png"; a.click();
+    track("result_shared",{via:"download"});
+  },"image/png");
+}
+function g_plain(t){ return g(t).replace(/<[^>]*>/g,""); }
 function adminExport(){ // 관리자: 이 기기의 누적 로그를 CSV로 다운로드
   const arr=JSON.parse(localStorage.getItem("aim_logs")||"[]");
   if(!arr.length){ alert("이 기기에 저장된 응답이 없습니다."); return; }
