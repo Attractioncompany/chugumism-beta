@@ -55,6 +55,16 @@ h1{font-size:26px;line-height:1.3;} h2{font-size:20px;line-height:1.4;margin-bot
 .small{font-size:11px;color:var(--sub);margin-top:14px;text-align:center;line-height:1.6;}
 textarea{width:100%;border:2px solid var(--line);border-radius:12px;padding:12px;font-size:14px;min-height:70px;margin-top:8px;font-family:inherit;}
 .hidden{display:none;}
+
+/* ── 모바일 최적화 (v3.3) ── */
+*{-webkit-tap-highlight-color:transparent;}
+button,.opt,.chip-item,.mood-item{touch-action:manipulation;}
+.opt:active,.chip-item:active{transform:scale(0.985);}
+textarea{font-size:16px !important;}
+body{padding-bottom:env(safe-area-inset-bottom);}
+.navrow{padding-bottom:calc(8px + env(safe-area-inset-bottom));}
+@media (prefers-reduced-motion: no-preference){ .opt.sel{animation:selpop .18s ease;} }
+@keyframes selpop{50%{transform:scale(1.02);}}
 </style>
 </head>
 <body>
@@ -317,6 +327,7 @@ function qOpts(q){ return (GENDER==="m"&&q.optsm)?q.optsm:q.opts; }
 function qTxt(q){ return (GENDER==="m"&&q.txtm)?q.txtm:q.txt; }
 
 function render(){
+  window.scrollTo({top:0,behavior:"instant"});
   if(phase==="start") return renderStart();
   if(phase==="survey") return renderQ();
   if(phase==="extra") return renderExtra();
@@ -508,7 +519,7 @@ function renderResult(){
   if(!window.__diagSaved){
     window.__diagSaved = true;
     const durS = Math.round((Date.now()-startTs)/1000);
-    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.2", want_type:wr[0][0], have_type:hr[0][0],
+    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.3", want_type:wr[0][0], have_type:hr[0][0],
       want_coord:{rank:wr.slice(0,3)}, have_coord:{rank:hr.slice(0,3)},
       gap: wr[0][0]===hr[0][0]?0:1, extra_used:extraQ.length, duration_sec:durS, answers:answers});
     track("diagnosis_completed",{want:wr[0][0], have:hr[0][0], extra:extraQ.length, dur:durS, gender:GENDER});
