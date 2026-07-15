@@ -149,8 +149,8 @@ const Q = [
  {part:"A",intro:"먼저, 당신이 <b>되고 싶은 모습</b>부터 찾아볼게요.<br>지금의 나와 달라도 괜찮아요 — 끌리는 대로 골라주세요 💫"},
  {part:"A",id:"A1",kind:"mood",set:"r1",txt:"보자마자 <b>마음이 가는 사진</b>을 모두 골라주세요",multi:true,want:true},
  {part:"A",id:"A2",kind:"mood",set:"r2",txt:"<b>입어보고 싶은 스타일</b>을 모두 골라주세요",multi:true,want:true},
- {part:"A",id:"A3",kind:"mood",set:"r3",txt:"'이런 내가 되고 싶다' 싶은 <b>순간</b>을 모두 골라주세요",multi:true,want:true},
- {part:"A",id:"A4",kind:"mood",set:"r4",txt:"<b>따라 해보고 싶은 포인트</b>를 모두 골라주세요",multi:true,want:true},
+ {part:"A",id:"A3",kind:"mood",set:"r3",txt:"<b>이 장면 속의 나</b>, 상상만 해도 좋다! 싶은 걸 모두 골라주세요",multi:true,want:true},
+ {part:"A",id:"A4",kind:"mood",set:"r4",txt:"<b>따라 해보고 싶은 포인트</b>를 모두 골라주세요",txtm:"끌리는 <b>색감·무드</b>를 모두 골라주세요 <span style='font-weight:400;font-size:12.5px;color:var(--sub)'>(스타일링에 쓰고 싶은 색이라 생각하고)</span>",multi:true,want:true},
  {part:"A",id:"A5",kind:"choice",txt:"되고 싶은 느낌, 굳이 하나를 고른다면?",want:true,opts:[
    {t:"따뜻하고 포근한 느낌",axis:{warm:1}},{t:"시원하고 깔끔한 느낌",axis:{cool:1}}]},
  {part:"A",id:"A6",kind:"choice",txt:"어느 쪽 분위기에 더 가까워지고 싶어요?",want:true,opts:[
@@ -294,6 +294,35 @@ const Q = [
    {t:"생각은 있는데 방법을 모르겠어요",meta:"will_lost"},
    {t:"하나씩 시도해보고 있어요",meta:"will_trying"},
    {t:"확 바꾸고 싶어요, 도와주면 바로 할래요",meta:"will_ready"}]},
+{part:"D",id:"D4",kind:"choice",multi:true,txt:"추구미대로 <b>못 하고 있는 이유</b>가 있다면? (모두)",opts:[
+   {t:"방법을 모르겠어요",meta:"gap_how"},
+   {t:"어울릴지 자신이 없어요",meta:"gap_confid"},
+   {t:"시간이 없거나 귀찮아요",meta:"gap_time"},
+   {t:"돈이 부담돼요",meta:"gap_money"},
+   {t:"주변 시선이 신경 쓰여요",meta:"gap_eyes"},
+   {t:"아니요, 이미 꽤 하고 있어요",meta:"gap_none"}]},
+{part:"D",id:"D5",kind:"choice",txt:"스타일 변화, <b>어디까지</b> 해볼 수 있어요?",opts:[
+   {t:"옷·소품 정도",meta:"range_cloth"},
+   {t:"헤어스타일까지",meta:"range_hair"},
+   {t:"피부·눈썹 관리까지",meta:"range_groom"},
+   {t:"전부 다 가능해요",meta:"range_all"}]},
+{part:"D",id:"D6",kind:"choice",txt:"나를 가꾸는 데 <b>매주 쓸 수 있는 시간</b>은?",opts:[
+   {t:"10분 정도",meta:"time_10"},
+   {t:"30분 정도",meta:"time_30"},
+   {t:"1시간 정도",meta:"time_60"},
+   {t:"그 이상도 가능해요",meta:"time_60p"}]},
+{part:"D",id:"D7",kind:"choice",multi:true,txt:"옷·뷰티 제품, 주로 <b>어디서</b> 사요? (모두)",opts:[
+   {t:"무신사·29CM 같은 온라인 편집숍",meta:"ch_select"},
+   {t:"에이블리·지그재그",meta:"ch_ably"},
+   {t:"쿠팡·네이버 같은 오픈마켓",meta:"ch_open"},
+   {t:"백화점·브랜드 매장",meta:"ch_dept"},
+   {t:"보세·동네 옷가게",meta:"ch_bose"},
+   {t:"자라·유니클로 같은 SPA",meta:"ch_spa"}]},
+{part:"D",id:"D8",kind:"choice",txt:"한 달에 <b>패션·뷰티에 쓰는 돈</b>은 어느 정도예요?",opts:[
+   {t:"5만원 미만",meta:"bud_5"},
+   {t:"5~15만원",meta:"bud_15"},
+   {t:"15~30만원",meta:"bud_30"},
+   {t:"30만원 이상",meta:"bud_30p"}]},
 ];
 const PAIRS = [
  {pair:["romantic","pure"],q:"더 끌리는 쪽은?",a:"따뜻한 파스텔 핑크·피치의 화사함",b:"맑고 시원한 화이트·연블루의 깨끗함"},
@@ -398,7 +427,9 @@ function renderQ(){
       const sel=(answers[q.id]||[]).includes(i)?" sel":"";
       html+=`<div class="mood${sel}" id="md_${q.id}_${i}" style="background:linear-gradient(135deg,${TYPES[m[0]].color},${shade(TYPES[m[0]].color)})" onclick="pickMood('${q.id}',${i})"><span class="em">${m[1]}</span><span>${m[2]}</span></div>`;
       const key=`${q.set}_${m[0]}`;
-      if(IMGDATA[key]){ setTimeout(()=>{const el=document.getElementById(`md_${q.id}_${i}`); if(el){el.style.backgroundImage=`url(${IMGDATA[key]})`; el.classList.add("hasimg");}},0); }
+      const IMG_READY=["r1_romantic","r1_pure","r1_elegant","r1_energetic","r1_gorgeous","r1_classic","r1_charisma","r1_chic","r2_romantic","r2_pure","r2_elegant","r2_energetic","r2_gorgeous","r2_classic","r2_charisma","r2_chic","r3_romantic","r3_pure","r3_elegant","r3_energetic","r3_gorgeous","r3_classic","r3_charisma","r3_chic","r4_romantic","r4_pure","r4_elegant","r4_energetic","r4_gorgeous","r4_classic","r4_charisma","r4_chic"];
+      const src = IMG_READY.includes(key) ? `bg/${key}.jpg` : IMGDATA[key];
+      if(src){ setTimeout(()=>{const el=document.getElementById(`md_${q.id}_${i}`); if(el){el.style.backgroundImage=`url(${src})`; el.classList.add("hasimg");}},0); }
     });
     html+=`</div>`+navRow(!hasSel);
   } else if(q.kind==="chips"){
@@ -519,7 +550,7 @@ function renderResult(){
   if(!window.__diagSaved){
     window.__diagSaved = true;
     const durS = Math.round((Date.now()-startTs)/1000);
-    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.3", want_type:wr[0][0], have_type:hr[0][0],
+    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.7", want_type:wr[0][0], have_type:hr[0][0],
       want_coord:{rank:wr.slice(0,3)}, have_coord:{rank:hr.slice(0,3)},
       gap: wr[0][0]===hr[0][0]?0:1, extra_used:extraQ.length, duration_sec:durS, answers:answers});
     track("diagnosis_completed",{want:wr[0][0], have:hr[0][0], extra:extraQ.length, dur:durS, gender:GENDER});
@@ -570,6 +601,10 @@ function renderResult(){
      <textarea id="fbTxt" placeholder="추가하고 싶은 질문이나, 이상했던 문항이 있다면 알려주세요! (선택)"></textarea>
      <button class="btn" onclick="saveLog()">다음 — 피드백 남기기</button>
      <button class="btn ghost" onclick="location.reload()">처음부터 다시</button></div>
+   <div class="sec" id="waitSec"><h3>🫧 내 추구미로 가는 4주 코칭</h3>
+     <p class="small" style="margin:4px 0 10px">구미가 매주 딱 하나씩, 나에게 맞는 변화 미션을 처방해드려요. 곧 열려요 — 가장 먼저 알림 받기:</p>
+     <input id="wlContact" placeholder="이메일 또는 인스타 아이디" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid var(--line);font-size:16px;box-sizing:border-box"/>
+     <button class="btn" style="margin-top:8px" onclick="joinWaitlist()">코칭 열리면 알려주세요</button></div>
    <p class="small">추구미즘 베타 · 사진 진단이 더해지면 훨씬 정확해져요</p>
   </div>`;
   window._result={gender:GENDER,want:wr[0][0],wantRank:wr.slice(0,3),have:hr[0][0],extraUsed:extraQ.length};
@@ -584,6 +619,12 @@ function pickSelf(k){
   selfPick=k;
   document.querySelectorAll(".sp-chip").forEach(c=>c.classList.toggle("sel", c.dataset.k===k));
   track("result_self_pick",{picked:k});
+}
+function joinWaitlist(){
+  const c=($("wlContact").value||"").trim();
+  if(!c){ $("wlContact").focus(); $("wlContact").style.borderColor="#B76BA3"; return; }
+  track("coaching_waitlist",{contact:c, want:topTwo(scoreWant)[0][0]});
+  $("waitSec").innerHTML=`<h3>🫧 신청 완료!</h3><p class="small">코칭이 열리면 가장 먼저 알려드릴게요. 그때까지 구미가 준비하고 있을게요 💫</p>`;
 }
 function saveLog(){
   const wr=topTwo(scoreWant), hr=topTwo(scoreHave);
