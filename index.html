@@ -137,15 +137,15 @@ const MOODS = {
 /* 문항: t=여성/공용 텍스트, tm=남성 텍스트, opts/optsm=성별별 선택지 */
 const Q = [
  {part:"A",intro:"먼저, 당신이 <b>되고 싶은 모습</b>부터 찾아볼게요.<br>지금의 나와 달라도 괜찮아요 — 끌리는 대로 골라주세요 💫"},
- {part:"A",id:"A1",kind:"mood",set:"r1",txt:"끌리는 <b>분위기</b>를 모두 골라주세요",multi:true,want:true},
- {part:"A",id:"A2",kind:"mood",set:"r2",txt:"끌리는 <b>패션 무드</b>를 모두 골라주세요",multi:true,want:true},
- {part:"A",id:"A3",kind:"mood",set:"r3",txt:"끌리는 <b>순간</b>을 모두 골라주세요",multi:true,want:true},
- {part:"A",id:"A4",kind:"mood",set:"r4",txt:"끌리는 <b>스타일 포인트</b>를 모두 골라주세요",multi:true,want:true},
+ {part:"A",id:"A1",kind:"mood",set:"r1",txt:"보자마자 <b>마음이 가는 사진</b>을 모두 골라주세요",multi:true,want:true},
+ {part:"A",id:"A2",kind:"mood",set:"r2",txt:"<b>입어보고 싶은 스타일</b>을 모두 골라주세요",multi:true,want:true},
+ {part:"A",id:"A3",kind:"mood",set:"r3",txt:"'이런 내가 되고 싶다' 싶은 <b>순간</b>을 모두 골라주세요",multi:true,want:true},
+ {part:"A",id:"A4",kind:"mood",set:"r4",txt:"<b>따라 해보고 싶은 포인트</b>를 모두 골라주세요",multi:true,want:true},
  {part:"A",id:"A5",kind:"choice",txt:"되고 싶은 느낌, 굳이 하나를 고른다면?",want:true,opts:[
    {t:"따뜻하고 포근한 느낌",axis:{warm:1}},{t:"시원하고 깔끔한 느낌",axis:{cool:1}}]},
  {part:"A",id:"A6",kind:"choice",txt:"어느 쪽 분위기에 더 가까워지고 싶어요?",want:true,opts:[
-   {t:"부드럽고 편안해 보이는 사람",axis:{soft:1}},{t:"또렷하고 강단 있어 보이는 사람",axis:{deep:1}}]},
- {part:"A",id:"A7",kind:"choice",txt:"옷장을 새로 채운다면?",want:true,opts:[
+   {t:"부드럽고 편안해 보이는 사람",axis:{soft:1}},{t:"또렷하고 당차 보이는 사람",axis:{deep:1}}]},
+ {part:"A",id:"A7",kind:"choice",txt:"옷장을 싹 비우고 새로 채운다면, 어떤 <b>색</b>이 많을까요?",want:true,opts:[
    {t:"크림·베이지·코랄처럼 온기 있는 색",axis:{warm:1}},{t:"화이트·네이비·블랙처럼 선명한 색",axis:{cool:1}}]},
  {part:"A",id:"A8",kind:"choice",txt:"듣고 싶은 첫인상 칭찬은?",want:true,opts:[
    {t:"\u201c분위기가 참 부드러우세요\u201d",axis:{soft:1}},{t:"\u201c존재감이 확실하시네요\u201d",axis:{deep:1}}]},
@@ -159,7 +159,7 @@ const Q = [
    {t:"얇고 선명한 라인",w:{romantic:2,pure:1},svg:"thin"},
    {t:"두껍고 뚜렷한 라인",w:{gorgeous:2,charisma:1},svg:"thick"},
    {t:"무쌍이거나 속쌍",w:{pure:1,elegant:1,charisma:1},svg:"mono"}]},
- {part:"B",id:"B2",kind:"choice",txt:"내 <b>볼선</b>과 가장 비슷한 건?",opts:[
+ {part:"B",id:"B2",kind:"choice",txt:"내 <b>얼굴 라인(볼·턱)</b>과 가장 비슷한 건?",opts:[
    {t:"볼이 도톰하고 부드러운 편",w:{romantic:2,energetic:2}},
    {t:"갸름하고 깔끔한 편",w:{pure:2,chic:1,elegant:1}},
    {t:"광대·턱 등 굴곡이 뚜렷한 편",w:{gorgeous:2,charisma:2}}]},
@@ -170,7 +170,7 @@ const Q = [
    {t:"볼륨 강한 컬·다크 롱헤어",w:{gorgeous:2}},{t:"슬릭·숏컷·로우번",w:{charisma:1,chic:1}}],
   optsm:[
    {t:"부드러운 펌·내추럴 미디엄",w:{romantic:2}},{t:"깔끔한 댄디컷",w:{pure:2}},
-   {t:"단정한 가르마·세미 클래식",w:{elegant:1,classic:1}},{t:"밝은 염색·개성 있는 스타일",w:{energetic:2}},
+   {t:"단정한 가르마·클래식 스타일",w:{elegant:1,classic:1}},{t:"밝은 염색·개성 있는 스타일",w:{energetic:2}},
    {t:"볼륨 펌·장발",w:{gorgeous:2}},{t:"포마드 슬릭백·각진 투블럭",w:{charisma:1,chic:1}}]},
  {part:"B",id:"B4",kind:"choice",txt:"<b>머리 색</b>은?",opts:[
    {t:"밝은 갈색~염색 컬러",w:{energetic:1,romantic:1}},{t:"자연스러운 갈색",w:{pure:1,elegant:1,classic:1}},
@@ -186,12 +186,12 @@ const Q = [
    {t:"거의 안 해요",w:{}}]},
  {part:"B",id:"B6",kind:"choice",txt:"자주 쓰는 <b>립 컬러</b>는?",txtm:"끌리는 <b>향</b>은?",
   opts:[
-   {t:"🍑 코랄·피치",w:{romantic:1,energetic:1}},{t:"🌷 은은한 핑크·MLBB",w:{pure:1,classic:1}},
+   {t:"🍑 코랄·피치",w:{romantic:1,energetic:1}},{t:"🌷 은은한 핑크 (내 입술색 같은 톤)",w:{pure:1,classic:1}},
    {t:"🥀 말린장미·로즈브라운",w:{elegant:2}},{t:"🍷 버건디·브릭·딥레드",w:{gorgeous:1,charisma:1}},
    {t:"🍒 맑은 레드·핑크베이지",w:{chic:2}}],
   optsm:[
-   {t:"🌸 달콤한 플로럴·파우더리",w:{romantic:2}},{t:"🧼 비누·시트러스",w:{pure:2}},
-   {t:"🌫️ 은은한 머스크",w:{elegant:1,classic:1}},{t:"🔥 우디·스파이시·레더",w:{gorgeous:1,charisma:1}},
+   {t:"🌸 달콤하고 포근한 향 (플로럴)",w:{romantic:2}},{t:"🧼 비누·시트러스",w:{pure:2}},
+   {t:"🌫️ 은은한 머스크",w:{elegant:1,classic:1}},{t:"🔥 묵직하고 진한 향 (우디·레더)",w:{gorgeous:1,charisma:1}},
    {t:"🌊 깔끔한 아쿠아",w:{chic:2}},{t:"향수는 잘 안 써요",w:{}}]},
  {part:"B",id:"B7",kind:"choice",txt:"골드와 실버, 나에게 <b>더 잘 받는</b> 건?",opts:[
    {t:"골드가 잘 받아요",axis:{warm:1},have:true},{t:"실버가 잘 받아요",axis:{cool:1},have:true},
@@ -220,11 +220,11 @@ const Q = [
    {t:"트렌치·롱코트",w:{classic:2}},{t:"니트 블레이저·치노",w:{classic:2}},
    {t:"올블랙 셋업",w:{charisma:2}},{t:"무광 레더·부츠",w:{charisma:2}},
    {t:"수트·정장",w:{chic:2}},{t:"미니멀 셋업",w:{chic:2}}]},
- {part:"B",id:"B10",kind:"choice",txt:"옷 <b>소재</b>는 주로—",opts:[
+ {part:"B",id:"B10",kind:"choice",txt:"주로 입는 옷 <b>소재</b>는?",opts:[
    {t:"하늘하늘하고 부드러운 (쉬폰·니트)",w:{romantic:1,elegant:1}},
    {t:"가볍고 깔끔한 (코튼·셔츠·데님)",w:{pure:1,energetic:1,chic:1}},
    {t:"존재감 있는 (가죽·새틴·트위드)",w:{gorgeous:1,charisma:1,classic:1}}]},
- {part:"B",id:"B11",kind:"choice",txt:"옷 <b>핏</b>은 주로—",opts:[
+ {part:"B",id:"B11",kind:"choice",txt:"주로 입는 옷 <b>핏</b>은?",opts:[
    {t:"흐르거나 퍼지는 핏 (A라인·와이드)",w:{romantic:1,elegant:1,energetic:1}},
    {t:"몸에 맞는 깔끔한 핏",w:{pure:1,classic:1,chic:1}},
    {t:"라인이 드러나거나 각 잡힌 핏",w:{gorgeous:1,charisma:1}}],
@@ -232,7 +232,7 @@ const Q = [
    {t:"여유 있고 편안한 핏 (오버·와이드)",w:{romantic:1,elegant:1,energetic:1}},
    {t:"몸에 맞는 깔끔한 핏",w:{pure:1,classic:1,chic:1}},
    {t:"라인이 살거나 각 잡힌 핏",w:{gorgeous:1,charisma:1}}]},
- {part:"B",id:"B12",kind:"choice",txt:"옷을 고를 때 나는—",opts:[
+ {part:"B",id:"B12",kind:"choice",txt:"옷을 고를 때 나는?",opts:[
    {t:"편안함이 우선이에요",meta:"engage_low"},{t:"그날의 무드·연출이 우선이에요",meta:"engage_high"}]},
  {part:"B",id:"B13",kind:"choice",txt:"<b>액세서리</b>는 어떻게 하는 편인가요?",
   opts:[
@@ -252,11 +252,11 @@ const Q = [
    {t:"무난해서 어디든 어울리는 걸로",meta:"shoe_mid"},
    {t:"그날 옷에 맞춰 골라 신어요",meta:"shoe_high"}]},
  {part:"C",intro:"거의 다 왔어요! 마지막으로 <b>나의 태도</b>예요 🙌"},
- {part:"C",id:"C1",kind:"choice",txt:"웃을 때 나는 주로—",opts:[
+ {part:"C",id:"C1",kind:"choice",txt:"웃을 때 나는?",opts:[
    {t:"입을 가리거나 조용히 미소 지어요",w:{romantic:1,elegant:1}},
-   {t:"해사하게, 부담 없이 웃어요",w:{pure:2}},
+   {t:"환하게, 부담 없이 웃어요",w:{pure:2}},
    {t:"소리 내서 크게 웃어요",w:{energetic:2}},
-   {t:"여유 있게, 절제해서 웃어요",w:{classic:1,charisma:1,chic:1}}]},
+   {t:"여유 있게, 은은히 웃어요",w:{classic:1,charisma:1,chic:1}}]},
  {part:"C",id:"C2",kind:"choice",txt:"대화할 때 몸짓·리액션은?",opts:[
    {t:"크지 않고 차분한 편",w:{romantic:1,elegant:1,classic:1}},
    {t:"리액션이 크고 활발한 편",w:{energetic:2,gorgeous:1}},
@@ -288,11 +288,11 @@ const Q = [
 const PAIRS = [
  {pair:["romantic","pure"],q:"더 끌리는 쪽은?",a:"따뜻한 파스텔 핑크·피치의 화사함",b:"맑고 시원한 화이트·연블루의 깨끗함"},
  {pair:["romantic","energetic"],q:"나 같은 쪽은?",a:"부드럽고 {여성스러운}",b:"통통 튀고 활동적인"},
- {pair:["pure","elegant"],q:"더 가까운 쪽은?",a:"맑고 생기 있는",b:"차분하고 성숙한"},
+ {pair:["pure","elegant"],q:"<b>되고 싶은 모습</b>에 더 가까운 쪽은?",a:"맑고 생기 있는",b:"차분하고 성숙한"},
  {pair:["gorgeous","classic"],q:"더 좋은 쪽은?",a:"강렬하고 화려한",b:"단정하고 고급스러운"},
  {pair:["charisma","chic"],q:"더 좋은 느낌은?",a:"강하고 압도적인",b:"샤프하고 세련된"},
  {pair:["romantic","elegant"],q:"더 나다운 쪽은?",a:"화사하고 {여성스러운}",b:"차분하고 귀품 있는"},
- {pair:["pure","chic"],q:"더 가까운 쪽은?",a:"부드럽고 맑은",b:"샤프하고 도시적인"},
+ {pair:["pure","chic"],q:"<b>되고 싶은 모습</b>에 더 가까운 쪽은?",a:"부드럽고 맑은",b:"샤프하고 도시적인"},
  {pair:["elegant","classic"],q:"더 끌리는 온도는?",a:"시원한 라벤더·그레이",b:"따뜻한 베이지·카멜"},
  {pair:["energetic","gorgeous"],q:"더 나다운 쪽은?",a:"귀엽고 발랄한 에너지",b:"성숙하고 강렬한 존재감"},
  {pair:["gorgeous","charisma"],q:"더 끌리는 쪽은?",a:"따뜻하고 관능적인 화려함",b:"차갑고 절제된 카리스마"},
@@ -508,7 +508,7 @@ function renderResult(){
   if(!window.__diagSaved){
     window.__diagSaved = true;
     const durS = Math.round((Date.now()-startTs)/1000);
-    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3", want_type:wr[0][0], have_type:hr[0][0],
+    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.2", want_type:wr[0][0], have_type:hr[0][0],
       want_coord:{rank:wr.slice(0,3)}, have_coord:{rank:hr.slice(0,3)},
       gap: wr[0][0]===hr[0][0]?0:1, extra_used:extraQ.length, duration_sec:durS, answers:answers});
     track("diagnosis_completed",{want:wr[0][0], have:hr[0][0], extra:extraQ.length, dur:durS, gender:GENDER});
