@@ -430,9 +430,12 @@ function renderQ(){
       const sel=(answers[q.id]||[]).includes(i)?" sel":"";
       html+=`<div class="mood${sel}" id="md_${q.id}_${i}" style="background:linear-gradient(135deg,${TYPES[m[0]].color},${shade(TYPES[m[0]].color)})" onclick="pickMood('${q.id}',${i})"><span class="em">${m[1]}</span><span>${m[2]}</span></div>`;
       const key=`${q.set}_${m[0]}`;
-      const IMG_READY=["r1_romantic","r1_pure","r1_elegant","r1_energetic","r1_gorgeous","r1_classic","r1_charisma","r1_chic","r2_romantic","r2_pure","r2_elegant","r2_energetic","r2_gorgeous","r2_classic","r2_charisma","r2_chic","r3_romantic","r3_pure","r3_elegant","r3_energetic","r3_gorgeous","r3_classic","r3_charisma","r3_chic","r4_romantic","r4_pure","r4_elegant","r4_energetic","r4_gorgeous","r4_classic","r4_charisma","r4_chic"];
-      const src = IMG_READY.includes(key) ? `bg/${key}.jpg` : IMGDATA[key];
-      if(src){ setTimeout(()=>{const el=document.getElementById(`md_${q.id}_${i}`); if(el){el.style.backgroundImage=`url(${src})`; el.classList.add("hasimg");}},0); }
+      // r1(분위기)=컬러+이모지가 정답(추상 취향엔 실사가 노이즈) · 남성용은 r2m_ 등 파일 추가 시 자동 적용
+      const IMG_READY=["r2_romantic","r2_pure","r2_elegant","r2_energetic","r2_gorgeous","r2_classic","r2_charisma","r2_chic","r3_romantic","r3_pure","r3_elegant","r3_energetic","r3_gorgeous","r3_classic","r3_charisma","r3_chic","r4_romantic","r4_pure","r4_elegant","r4_energetic","r4_gorgeous","r4_classic","r4_charisma","r4_chic"];
+      const mKey=`${q.set}m_${m[0]}`;
+      const src = (GENDER==="m"&&IMG_READY.includes(mKey)) ? `bg/${mKey}.jpg`
+                : IMG_READY.includes(key) ? `bg/${key}.jpg` : IMGDATA[key];
+      if(src){ setTimeout(()=>{const el=document.getElementById(`md_${q.id}_${i}`); if(el){el.style.backgroundImage=`url(${src})`; el.style.backgroundSize="cover"; el.style.backgroundPosition="center"; el.classList.add("hasimg");}},0); }
     });
     html+=`</div>`+navRow(!hasSel);
   } else if(q.kind==="chips"){
@@ -553,7 +556,7 @@ function renderResult(){
   if(!window.__diagSaved){
     window.__diagSaved = true;
     const durS = Math.round((Date.now()-startTs)/1000);
-    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.7.1", want_type:wr[0][0], have_type:hr[0][0],
+    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.8.1", want_type:wr[0][0], have_type:hr[0][0],
       want_coord:{rank:wr.slice(0,3)}, have_coord:{rank:hr.slice(0,3)},
       gap: wr[0][0]===hr[0][0]?0:1, extra_used:extraQ.length, duration_sec:durS, answers:answers});
     track("diagnosis_completed",{want:wr[0][0], have:hr[0][0], extra:extraQ.length, dur:durS, gender:GENDER});
