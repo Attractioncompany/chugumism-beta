@@ -144,7 +144,7 @@ const IMGDATA = {"r1_romantic":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
 const MOODS = {
   r1:[["romantic","🌸","파스텔·플라워"],["pure","💧","맑은 물빛"],["elegant","🌫️","잔잔한 안개"],["energetic","🍊","쨍한 비타민"],["gorgeous","🍷","깊은 와인"],["classic","🍂","가을 카멜"],["charisma","🖤","올블랙"],["chic","🏙️","도시의 밤"]],
   r2:[["romantic","🎀","리본·프릴 무드"],["pure","👕","화이트 셔츠·연청"],["elegant","🧣","실키·소프트"],["energetic","🧢","캐주얼·스트릿"],["gorgeous","🧥","가죽·새틴"],["classic","🧥","트렌치·클래식"],["charisma","🕶️","각 잡힌 블랙"],["chic","💼","미니멀 오피스"]],
-  r3:[["romantic","🛋️","포근한 파스텔 룸"],["pure","🌊","바닷가 산책"],["elegant","🫖","조용한 티타임"],["energetic","🎡","놀이공원·페스티벌"],["gorgeous","🥂","루프탑 파티"],["classic","📚","앤틱 서재"],["charisma","🏋️","강렬한 무대"],["chic","☕","뉴욕 카페"]],
+  r3:[["romantic","🛋️","포근한 파스텔 룸"],["pure","🌊","바닷가 산책"],["elegant","🫖","조용한 티타임"],["energetic","🎡","놀이공원·페스티벌"],["gorgeous","🥂","루프탑 파티"],["classic","📚","앤틱 서재"],["charisma","🏋️","강렬한 무대"],["chic","☕","도시의 오피스"]],
   r4:[["romantic","💗","촉촉 글로우·코랄"],["pure","🧼","꾸안꾸 맑은 무드"],["elegant","🥀","말린장미 무드"],["energetic","✨","생기·반짝 포인트"],["gorgeous","💄","음영·딥레드"],["classic","🤎","단정한 뉴트럴"],["charisma","🗡️","직선·시크"],["chic","❄️","선명한 포인트"]]
 };
 /* 문항: t=여성/공용 텍스트, tm=남성 텍스트, opts/optsm=성별별 선택지 */
@@ -431,11 +431,18 @@ function renderQ(){
       html+=`<div class="mood${sel}" id="md_${q.id}_${i}" style="background:linear-gradient(135deg,${TYPES[m[0]].color},${shade(TYPES[m[0]].color)})" onclick="pickMood('${q.id}',${i})"><span class="em">${m[1]}</span><span>${m[2]}</span></div>`;
       const key=`${q.set}_${m[0]}`;
       // r1(분위기)=컬러+이모지가 정답(추상 취향엔 실사가 노이즈) · 남성용은 r2m_ 등 파일 추가 시 자동 적용
-      const IMG_READY=["r2_romantic","r2_pure","r2_elegant","r2_energetic","r2_gorgeous","r2_classic","r2_charisma","r2_chic","r3_romantic","r3_pure","r3_elegant","r3_energetic","r3_gorgeous","r3_classic","r3_charisma","r3_chic","r4_romantic","r4_pure","r4_elegant","r4_energetic","r4_gorgeous","r4_classic","r4_charisma","r4_chic"];
+      const IMG_READY=["r2m_romantic","r2m_pure","r2m_elegant","r2m_energetic","r2m_gorgeous","r2m_classic","r2m_charisma","r2m_chic","r2_romantic","r2_pure","r2_elegant","r2_energetic","r2_gorgeous","r2_classic","r2_charisma","r2_chic","r3_romantic","r3_pure","r3_elegant","r3_energetic","r3_gorgeous","r3_classic","r3_charisma","r3_chic","r4_romantic","r4_pure","r4_elegant","r4_energetic","r4_gorgeous","r4_classic","r4_charisma","r4_chic"];
       const mKey=`${q.set}m_${m[0]}`;
-      const src = (GENDER==="m"&&IMG_READY.includes(mKey)) ? `bg/${mKey}.jpg`
-                : IMG_READY.includes(key) ? `bg/${key}.jpg` : IMGDATA[key];
-      if(src){ setTimeout(()=>{const el=document.getElementById(`md_${q.id}_${i}`); if(el){el.style.backgroundImage=`url(${src})`; el.style.backgroundSize="cover"; el.style.backgroundPosition="center"; el.classList.add("hasimg");}},0); }
+      const MPAL={romantic:["#F5E6D8","#F2C4A8","#E8A798","#D9C2A7","#B78B6D"],pure:["#FFFFFF","#D6E9F5","#A8CDE8","#BFE3D9","#E8ECEF"],elegant:["#F4F0EA","#E6DCD3","#C9B8C4","#A9998C","#6E5F58"],energetic:["#FF7A3D","#FFD23F","#2E6FE8","#FFFFFF","#1E1E1E"],gorgeous:["#7D1F3A","#D4AF37","#4A2B5C","#1A1A1A","#EFE1C6"],classic:["#1F3A5F","#6B4A2F","#C19A6B","#722F37","#F2EAD9"],charisma:["#111111","#3A3A3A","#7A8288","#8B1E2D","#F5F5F5"],chic:["#9AA0A6","#FFFFFF","#1E1E1E","#C9CDD2","#D8D3CB"]};
+      let src;
+      if(GENDER==="m"&&q.set==="r4"){ // 남성 A4 = 퍼스널컬러 칩셋 (대표 결정 2026-07-15)
+        const p=MPAL[m[0]];
+        src=`linear-gradient(180deg, ${p[0]} 0 20%, ${p[1]} 20% 40%, ${p[2]} 40% 60%, ${p[3]} 60% 80%, ${p[4]} 80% 100%)`;
+      } else {
+        const f=(GENDER==="m"&&IMG_READY.includes(mKey)) ? `bg/${mKey}.jpg` : IMG_READY.includes(key) ? `bg/${key}.jpg` : null;
+        src = f ? `url(${f})` : IMGDATA[key] ? `url(${IMGDATA[key]})` : null;
+      }
+      if(src){ setTimeout(()=>{const el=document.getElementById(`md_${q.id}_${i}`); if(el){el.style.backgroundImage=src; el.style.backgroundSize="cover"; el.style.backgroundPosition="center"; el.classList.add("hasimg");}},0); }
     });
     html+=`</div>`+navRow(!hasSel);
   } else if(q.kind==="chips"){
@@ -556,7 +563,7 @@ function renderResult(){
   if(!window.__diagSaved){
     window.__diagSaved = true;
     const durS = Math.round((Date.now()-startTs)/1000);
-    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.8.1", want_type:wr[0][0], have_type:hr[0][0],
+    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.9.1", want_type:wr[0][0], have_type:hr[0][0],
       want_coord:{rank:wr.slice(0,3)}, have_coord:{rank:hr.slice(0,3)},
       gap: wr[0][0]===hr[0][0]?0:1, extra_used:extraQ.length, duration_sec:durS, answers:answers});
     track("diagnosis_completed",{want:wr[0][0], have:hr[0][0], extra:extraQ.length, dur:durS, gender:GENDER});
