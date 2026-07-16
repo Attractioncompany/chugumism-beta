@@ -21,6 +21,9 @@ h1{font-size:26px;line-height:1.3;} h2{font-size:20px;line-height:1.4;margin-bot
 .opt:active{transform:scale(.98);} .opt.sel{border-color:var(--accent);background:#F7EBF4;font-weight:600;}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.mood-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+.mood-grid .mood{font-size:12px;}
+.mood::after{background:linear-gradient(to top,rgba(0,0,0,.34),transparent 42%);}
 .chipgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
 .chip-item{background:var(--bg);border:2px solid transparent;border-radius:10px;padding:11px 12px;font-size:13.5px;line-height:1.35;cursor:pointer;text-align:center;color:var(--ink);}
 .chip-item.sel{border-color:var(--accent);background:#F7EBF4;font-weight:700;}
@@ -422,7 +425,7 @@ function renderQ(){
   if(q.multi&&q.kind!=="chips") html+=`<div class="q-sub">${q.max?`최대 ${q.max}개까지`:"여러 개 골라도 좋아요"}</div>`;
   const hasSel = q.multi ? (answers[q.id]||[]).length>0 : answers[q.id]!==undefined;
   if(q.kind==="mood"){
-    html+=`<div class="grid">`;
+    html+=`<div class="grid mood-grid">`;
     MOODS[q.set].forEach((m,i)=>{
       const sel=(answers[q.id]||[]).includes(i)?" sel":"";
       html+=`<div class="mood${sel}" id="md_${q.id}_${i}" style="background:linear-gradient(135deg,${TYPES[m[0]].color},${shade(TYPES[m[0]].color)})" onclick="pickMood('${q.id}',${i})"><span class="em">${m[1]}</span><span>${m[2]}</span></div>`;
@@ -550,7 +553,7 @@ function renderResult(){
   if(!window.__diagSaved){
     window.__diagSaved = true;
     const durS = Math.round((Date.now()-startTs)/1000);
-    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.7", want_type:wr[0][0], have_type:hr[0][0],
+    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.7.1", want_type:wr[0][0], have_type:hr[0][0],
       want_coord:{rank:wr.slice(0,3)}, have_coord:{rank:hr.slice(0,3)},
       gap: wr[0][0]===hr[0][0]?0:1, extra_used:extraQ.length, duration_sec:durS, answers:answers});
     track("diagnosis_completed",{want:wr[0][0], have:hr[0][0], extra:extraQ.length, dur:durS, gender:GENDER});
