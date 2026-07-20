@@ -365,7 +365,13 @@ function render(){
   if(phase==="extra") return renderExtra();
   if(phase==="result") return renderResult();
 }
+function preloadMoods(){
+  const T=["romantic","pure","elegant","energetic","gorgeous","classic","charisma","chic"];
+  const keys=[]; ["r2","r3","r4"].forEach(s=>T.forEach(t=>keys.push(s+"_"+t))); T.forEach(t=>keys.push("r2m_"+t));
+  keys.forEach(k=>{ const im=new Image(); im.src="bg/"+k+".jpg"; });
+}
 function renderStart(){
+  setTimeout(preloadMoods, 600);
   $("prog").classList.add("hidden");
   app.innerHTML=`<div class="card break-card">
    <div class="em">🫧</div><h1>추구미즘</h1>
@@ -563,7 +569,7 @@ function renderResult(){
   if(!window.__diagSaved){
     window.__diagSaved = true;
     const durS = Math.round((Date.now()-startTs)/1000);
-    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.9.2", want_type:wr[0][0], have_type:hr[0][0],
+    sbInsert("diagnoses", {user_id:UID, app_version:"beta_v3.10", want_type:wr[0][0], have_type:hr[0][0],
       want_coord:{rank:wr.slice(0,3)}, have_coord:{rank:hr.slice(0,3)},
       gap: wr[0][0]===hr[0][0]?0:1, extra_used:extraQ.length, duration_sec:durS, answers:answers});
     track("diagnosis_completed",{want:wr[0][0], have:hr[0][0], extra:extraQ.length, dur:durS, gender:GENDER});
@@ -604,6 +610,10 @@ function renderResult(){
    <div class="sec"><h3>🌉 방향 제안</h3>${bridge}</div>
    ${gapNote}
    <div class="sec"><h3>✨ ${W.name}에 다가가는 첫걸음</h3><p><b>유지·강화:</b> ${wKeep}<br><b>스타일:</b> ${wStyle}</p></div>
+   <div class="sec" id="waitSec"><h3>🫧 내 추구미로 가는 4주 코칭</h3>
+     <p class="small" style="margin:4px 0 10px">구미가 매주 딱 하나씩, 나에게 맞는 변화 미션을 처방해드려요. 곧 열려요 — 가장 먼저 알림 받기:</p>
+     <input id="wlContact" placeholder="이메일 또는 인스타 아이디" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid var(--line);font-size:16px;box-sizing:border-box"/>
+     <button class="btn" style="margin-top:8px" onclick="joinWaitlist()">코칭 열리면 알려주세요</button></div>
    <button class="btn" style="background:linear-gradient(90deg,#B76BA3,#4A2B5C)" onclick="shareCard()">💌 내 추구미 카드 공유하기</button>
    <div class="sec"><h3>이 결과, 어땠나요?</h3>
      <div class="fb"><button id="fbY" onclick="fb(1)">👍 나 같아요</button><button id="fbN" onclick="fb(0)">🤔 갸우뚱해요</button></div>
@@ -614,10 +624,6 @@ function renderResult(){
      <textarea id="fbTxt" placeholder="추가하고 싶은 질문이나, 이상했던 문항이 있다면 알려주세요! (선택)"></textarea>
      <button class="btn" onclick="saveLog()">다음 — 피드백 남기기</button>
      <button class="btn ghost" onclick="location.reload()">처음부터 다시</button></div>
-   <div class="sec" id="waitSec"><h3>🫧 내 추구미로 가는 4주 코칭</h3>
-     <p class="small" style="margin:4px 0 10px">구미가 매주 딱 하나씩, 나에게 맞는 변화 미션을 처방해드려요. 곧 열려요 — 가장 먼저 알림 받기:</p>
-     <input id="wlContact" placeholder="이메일 또는 인스타 아이디" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid var(--line);font-size:16px;box-sizing:border-box"/>
-     <button class="btn" style="margin-top:8px" onclick="joinWaitlist()">코칭 열리면 알려주세요</button></div>
    <p class="small">추구미즘 베타 · 사진 진단이 더해지면 훨씬 정확해져요</p>
   </div>`;
   window._result={gender:GENDER,want:wr[0][0],wantRank:wr.slice(0,3),have:hr[0][0],extraUsed:extraQ.length};
