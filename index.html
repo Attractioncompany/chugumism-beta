@@ -87,7 +87,7 @@ const SB_URL = "https://qngylynylgqlbidvtbci.supabase.co";
 const SB_KEY = "sb_publishable_bGVbZ31O7OX_rnkLVb0i5Q_SDa8JEri";
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfPlgpjnoS-JO78dDB3D2TM6vnLL59yTYTJ0idnwfgXQzyYCA/viewform?usp=pp_url";
 const FORM_ENTRY = {want:"574367992", have:"395118856", dur:"1863591096", gender:"701863111", raw:"1782704335"};
-const APP_VERSION = "beta_v3.10"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처)
+const APP_VERSION = "beta_v3.11"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11: B7 폐지(확정서 2026-07-22)
 // ---- 익명 유저 ID (기기 단위, 개인정보 아님) ----
 let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
@@ -209,9 +209,6 @@ const Q = [
    {t:"🌸 달콤하고 포근한 향 (플로럴)",w:{romantic:2}},{t:"🧼 비누·시트러스",w:{pure:2}},
    {t:"🌫️ 은은한 머스크",w:{elegant:1,classic:1}},{t:"🔥 묵직하고 진한 향 (우디·레더)",w:{gorgeous:1,charisma:1}},
    {t:"🌊 깔끔한 아쿠아",w:{chic:2}},{t:"향수는 잘 안 써요",w:{}}]},
- {part:"B",id:"B7",kind:"choice",txt:"골드와 실버, 나에게 <b>더 잘 받는</b> 건?",opts:[
-   {t:"골드가 잘 받아요",axis:{warm:1},have:true},{t:"실버가 잘 받아요",axis:{cool:1},have:true},
-   {t:"잘 모르겠어요",w:{}}]},
  {part:"B",id:"B8",kind:"choice",txt:"옷장에 <b>가장 많은 색</b>은?",opts:[
    {t:"🌸 파스텔 (핑크·크림)",w:{romantic:2}},{t:"🤍 화이트·연블루·연청",w:{pure:2}},
    {t:"🩶 그레이·라벤더",w:{elegant:2}},{t:"🧡 비비드 원색",w:{energetic:2}},
@@ -526,6 +523,9 @@ function scoreAll(){
   const axMap={warm:["romantic","energetic","gorgeous","classic"],cool:["pure","elegant","charisma","chic"],
                soft:["romantic","pure","elegant","energetic"],deep:["gorgeous","classic","charisma","chic"]};
   Object.entries(axisWant).forEach(([ax,v])=>{ axMap[ax].forEach(k=>scoreWant[k]+=v*0.8); });
+  // B7 폐지(확정서 2026-07-22 §3): axisHave.warm/cool 소스 소멸 → 항상 0.
+  // HAVE 웜쿨은 결측(미측정)이며 photo-module 드레이핑(R1·R2)이 전담. 0을 "중립"으로 표시 금지.
+  // renderResult 등 grep(axisHave|웜쿨|중립) 결과: HAVE 웜쿨을 축/수치로 노출하는 표시처 없음 확인(2026-07-22).
   Object.entries(axisHave).forEach(([ax,v])=>{ axMap[ax].forEach(k=>scoreHave[k]+=v*0.8); });
 }
 function topTwo(sc){ return TKEYS.map(k=>[k,sc[k]]).sort((a,b)=>b[1]-a[1]); }
