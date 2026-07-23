@@ -87,7 +87,7 @@ const SB_URL = "https://qngylynylgqlbidvtbci.supabase.co";
 const SB_KEY = "sb_publishable_bGVbZ31O7OX_rnkLVb0i5Q_SDa8JEri";
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfPlgpjnoS-JO78dDB3D2TM6vnLL59yTYTJ0idnwfgXQzyYCA/viewform?usp=pp_url";
 const FORM_ENTRY = {want:"574367992", have:"395118856", dur:"1863591096", gender:"701863111", raw:"1782704335"};
-const APP_VERSION = "beta_v3.12"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일(마케팅 2026-07-23)
+const APP_VERSION = "beta_v3.13"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23)
 // ---- 익명 유저 ID (기기 단위, 개인정보 아님) ----
 let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
@@ -379,7 +379,7 @@ function renderStart(){
    <div class="em">🫧</div><h1>추구미즘</h1>
    <p style="font-size:14px;color:var(--accent);font-weight:700;margin-top:6px">나의 추구미 찾기</p>
    <p style="margin:14px 0 4px;color:var(--sub);font-size:14px;line-height:1.7">
-   되고 싶은 모습(추구미)과 지금의 나를 진단하고<br>나에게 맞는 방향을 알려드려요.</p>
+   시작점을 알아야 목적지에 닿듯이,<br>지금 내 매력을 알아야 추구미로 갈 수 있어요.<br>같이 확인해봐요.</p>
    <p style="font-size:13px;color:var(--accent);font-weight:700;margin-top:10px">총 ${totalQ}문항 · 약 3~4분 · 전부 탭으로 선택만!</p>
    <div class="gender-row">
      <button id="gF" onclick="setG('f')">👩 여성</button>
