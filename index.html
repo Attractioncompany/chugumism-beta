@@ -65,7 +65,7 @@ h1{font-size:26px;line-height:1.3;} h2{font-size:20px;line-height:1.4;margin-bot
 /* ── 결과 캐러셀 4페이지 (대표 요청 2026-07-25) ── */
 .carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:6px 0 0;min-height:420px;}
 .carousel::-webkit-scrollbar{display:none;}
-.cpage{flex:0 0 100%;min-width:100%;scroll-snap-align:center;box-sizing:border-box;padding:0 2px;}
+.cpage{flex:0 0 100%;min-width:100%;scroll-snap-align:start;box-sizing:border-box;padding:0 2px;}
 .cp-inner{border-radius:20px;padding:22px 20px 24px;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:0 4px 16px rgba(58,43,69,.10);box-sizing:border-box;}
 .cp-inner.info{background:#fff;justify-content:flex-start;}
 .cp-inner.char{background-size:cover;background-position:center;color:#fff;justify-content:center;}
@@ -81,6 +81,17 @@ h1{font-size:26px;line-height:1.3;} h2{font-size:20px;line-height:1.4;margin-bot
 .dots{display:flex;justify-content:center;gap:7px;margin:14px 0 0;}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--line);transition:all .25s;}
 .dot.on{background:var(--accent);width:22px;border-radius:4px;}
+/* 결과 풀스크린 스테이지 (대표 요청 2026-07-25): 헤더 제거·캐러셀 꽉차게·도트 오버레이 */
+body.result-mode .wrap{max-width:none;padding:0;}
+body.result-mode .progress{display:none;}
+.result-stage{position:relative;}
+.result-stage .carousel{margin:0;min-height:0;}
+.result-stage .cpage{padding:0;}
+.result-stage .cp-inner{border-radius:0;padding-bottom:74px;}
+.result-stage .cp-inner.char{padding-left:26px;padding-right:26px;}
+.result-stage .dots{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));z-index:20;margin:0;background:rgba(43,34,51,.52);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:9px 15px;border-radius:22px;box-shadow:0 2px 12px rgba(0,0,0,.28);}
+.result-stage .dot{background:rgba(255,255,255,.5);}
+.result-stage .dot.on{background:#fff;}
 .swipe-hint{font-size:12px;color:var(--sub);text-align:center;margin-top:8px;}
 /* 코칭 접이식 (P5 원페이지 최적화) */
 details#waitSec{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:14px;}
@@ -128,7 +139,7 @@ const SB_URL = "https://qngylynylgqlbidvtbci.supabase.co";
 const SB_KEY = "sb_publishable_bGVbZ31O7OX_rnkLVb0i5Q_SDa8JEri";
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfPlgpjnoS-JO78dDB3D2TM6vnLL59yTYTJ0idnwfgXQzyYCA/viewform?usp=pp_url";
 const FORM_ENTRY = {want:"574367992", have:"395118856", dur:"1863591096", gender:"701863111", raw:"1782704335"};
-const APP_VERSION = "beta_v3.21"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
+const APP_VERSION = "beta_v3.22"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
 // ---- 익명 유저 ID (기기 단위, 개인정보 아님) ----
 let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
@@ -403,6 +414,7 @@ function qTxt(q){ return (GENDER==="m"&&q.txtm)?q.txtm:q.txt; }
 
 function render(){
   window.scrollTo({top:0,behavior:"instant"});
+  document.body.classList.toggle("result-mode", phase==="result");
   if(phase==="start") return renderStart();
   if(phase==="survey") return renderQ();
   if(phase==="extra") return renderExtra();
@@ -649,14 +661,7 @@ function renderResult(){
   const wKey=wr[0][0], hKey=hr[0][0];
   const charBg=(key,col)=>`background-color:${col};background-image:linear-gradient(180deg,rgba(28,20,34,.32),rgba(28,20,34,.64)),url(bg/r1_${key}.jpg)`;
   app.innerHTML=`
-   <div style="text-align:center;margin-bottom:2px">
-     <div style="display:inline-block;background:linear-gradient(135deg,${W.color},${shade(W.color)});width:48px;height:48px;border-radius:46% 54% 52% 48% / 55% 48% 52% 45%;box-shadow:0 4px 12px rgba(0,0,0,.12);position:relative">
-       <span style="position:absolute;top:13px;left:11px;width:6px;height:6px;background:#2B2233;border-radius:50%"></span>
-       <span style="position:absolute;top:13px;right:11px;width:6px;height:6px;background:#2B2233;border-radius:50%"></span>
-       <span style="position:absolute;top:24px;left:50%;transform:translateX(-50%);width:9px;height:5px;border-bottom:2px solid #2B2233;border-radius:0 0 10px 10px"></span>
-     </div>
-     <p style="font-size:12.5px;color:var(--sub);margin-top:5px">구미가 결과를 가져왔어요</p>
-   </div>
+   <div class="result-stage">
    <div class="carousel" id="rcar" onscroll="carDot()">
      <div class="cpage"><div class="cp-inner char" style="${charBg(hKey,Hv.color)}">
        <div class="cp-label">현재 내 매력은</div>
@@ -704,7 +709,7 @@ function renderResult(){
      </div></div>
    </div>
    <div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-   <div class="swipe-hint">← 좌우로 넘겨서 전체 결과를 확인하세요 →</div>`;
+   </div>`;
   carDot(); fitCarousel();
   window._result={gender:GENDER,want:wr[0][0],wantRank:wr.slice(0,3),have:hr[0][0],extraUsed:extraQ.length};
 }
@@ -717,8 +722,7 @@ function fitCarousel(){ // 모바일 원페이지: 캐러셀을 뷰포트 남는
   const c=$("rcar"); if(!c) return;
   const top=c.getBoundingClientRect().top;
   const vh=window.innerHeight||600;
-  const reserve=84; // 도트+스와이프 힌트+하단 여백
-  c.style.height=Math.max(400,Math.round(vh-top-reserve))+"px";
+  c.style.height=Math.max(420,Math.round(vh-top))+"px"; // 풀스크린 (도트는 오버레이)
 }
 window.addEventListener("resize",fitCarousel);
 window.addEventListener("orientationchange",()=>setTimeout(fitCarousel,200));
