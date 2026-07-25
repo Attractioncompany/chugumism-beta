@@ -62,6 +62,25 @@ h1{font-size:26px;line-height:1.3;} h2{font-size:20px;line-height:1.4;margin-bot
 .cmp-pc{font-size:13px;font-weight:700;opacity:.95;margin-top:8px;letter-spacing:.02em;}
 .cmp-sub{font-size:12.5px;opacity:.9;margin-top:6px;line-height:1.6;word-break:keep-all;overflow-wrap:break-word;padding:0 6px;}
 .cmp-arrow{text-align:center;font-size:20px;color:var(--sub);margin:9px 0;font-weight:700;}
+/* ── 결과 캐러셀 4페이지 (대표 요청 2026-07-25) ── */
+.carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:6px 0 0;}
+.carousel::-webkit-scrollbar{display:none;}
+.cpage{flex:0 0 100%;min-width:100%;scroll-snap-align:center;box-sizing:border-box;padding:0 2px;}
+.cp-inner{border-radius:20px;padding:24px 20px 28px;min-height:452px;display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:0 4px 16px rgba(58,43,69,.10);box-sizing:border-box;}
+.cp-inner.info{background:#fff;justify-content:flex-start;}
+.cp-inner.char{background-size:cover;background-position:center;color:#fff;justify-content:center;}
+.cp-inner.char .cp-label,.cp-inner.char .cp-type,.cp-inner.char .cp-pc,.cp-inner.char .cp-desc{text-shadow:0 1px 8px rgba(0,0,0,.5);}
+.cp-char{width:200px;height:200px;object-fit:cover;margin:4px 0 12px;border-radius:24px;background:rgba(255,255,255,.55);box-shadow:0 8px 20px rgba(0,0,0,.24);}
+.cp-label{font-size:14px;font-weight:700;letter-spacing:.02em;opacity:.95;}
+.cp-type{font-size:42px;font-weight:800;line-height:1.15;margin-top:3px;letter-spacing:-.02em;}
+.cp-pc{font-size:14px;font-weight:700;margin-top:12px;opacity:.96;}
+.cp-desc{font-size:14.5px;line-height:1.7;margin-top:14px;word-break:keep-all;overflow-wrap:break-word;max-width:350px;}
+.cp-title{font-size:17px;font-weight:800;color:var(--accent);margin-bottom:16px;align-self:flex-start;}
+.cp-inner .sec:first-of-type{margin-top:0;}
+.dots{display:flex;justify-content:center;gap:7px;margin:14px 0 0;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--line);transition:all .25s;}
+.dot.on{background:var(--accent);width:22px;border-radius:4px;}
+.swipe-hint{font-size:12px;color:var(--sub);text-align:center;margin-top:8px;}
 .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;}
 .bar-row .nm{width:64px;color:var(--sub);} .bar-bg{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden;}
 .bar-fg{height:100%;border-radius:4px;}
@@ -101,7 +120,7 @@ const SB_URL = "https://qngylynylgqlbidvtbci.supabase.co";
 const SB_KEY = "sb_publishable_bGVbZ31O7OX_rnkLVb0i5Q_SDa8JEri";
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfPlgpjnoS-JO78dDB3D2TM6vnLL59yTYTJ0idnwfgXQzyYCA/viewform?usp=pp_url";
 const FORM_ENTRY = {want:"574367992", have:"395118856", dur:"1863591096", gender:"701863111", raw:"1782704335"};
-const APP_VERSION = "beta_v3.18"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
+const APP_VERSION = "beta_v3.19"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
 // ---- 익명 유저 ID (기기 단위, 개인정보 아님) ----
 let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
@@ -390,7 +409,7 @@ function renderStart(){
   setTimeout(preloadMoods, 600);
   $("prog").classList.add("hidden");
   app.innerHTML=`<div class="card break-card">
-   <div class="em">🫧</div><h1>추구미즘</h1>
+   <img src="bg/main.jpg" alt="추구미즘" style="width:150px;height:150px;object-fit:cover;border-radius:28px;margin:0 auto 10px;display:block;box-shadow:0 8px 24px rgba(74,43,92,.20)"><h1>추구미즘</h1>
    <p style="font-size:14px;color:var(--accent);font-weight:700;margin-top:6px">나의 추구미 찾기</p>
    <p style="margin:14px 0 4px;color:var(--sub);font-size:14px;line-height:1.7">
    시작점을 알아야 목적지에 닿듯이,<br>지금 내 매력을 알아야 추구미로 갈 수 있어요.<br>같이 확인해봐요.</p>
@@ -619,51 +638,71 @@ function renderResult(){
   wr.slice(0,4).forEach(([k,v])=>{
     bars+=`<div class="bar-row"><span class="nm">${TYPES[k].name}</span><div class="bar-bg"><div class="bar-fg" style="width:${Math.round(v/wTotal*100*2.2)}%;background:${TYPES[k].color}"></div></div><span>${Math.round(v/wTotal*100)}%</span></div>`;
   });
-  app.innerHTML=`<div class="card">
-   <div style="text-align:center;margin-bottom:6px">
-     <div style="display:inline-block;background:linear-gradient(135deg,${W.color},${shade(W.color)});width:52px;height:52px;border-radius:46% 54% 52% 48% / 55% 48% 52% 45%;box-shadow:0 4px 12px rgba(0,0,0,.12);position:relative">
-       <span style="position:absolute;top:14px;left:12px;width:7px;height:7px;background:#2B2233;border-radius:50%"></span>
-       <span style="position:absolute;top:14px;right:12px;width:7px;height:7px;background:#2B2233;border-radius:50%"></span>
-       <span style="position:absolute;top:26px;left:50%;transform:translateX(-50%);width:10px;height:5px;border-bottom:2px solid #2B2233;border-radius:0 0 10px 10px"></span>
+  const wKey=wr[0][0], hKey=hr[0][0];
+  const charBg=(key,col)=>`background-color:${col};background-image:linear-gradient(180deg,rgba(28,20,34,.32),rgba(28,20,34,.64)),url(bg/r1_${key}.jpg)`;
+  app.innerHTML=`
+   <div style="text-align:center;margin-bottom:2px">
+     <div style="display:inline-block;background:linear-gradient(135deg,${W.color},${shade(W.color)});width:48px;height:48px;border-radius:46% 54% 52% 48% / 55% 48% 52% 45%;box-shadow:0 4px 12px rgba(0,0,0,.12);position:relative">
+       <span style="position:absolute;top:13px;left:11px;width:6px;height:6px;background:#2B2233;border-radius:50%"></span>
+       <span style="position:absolute;top:13px;right:11px;width:6px;height:6px;background:#2B2233;border-radius:50%"></span>
+       <span style="position:absolute;top:24px;left:50%;transform:translateX(-50%);width:9px;height:5px;border-bottom:2px solid #2B2233;border-radius:0 0 10px 10px"></span>
      </div>
-     <p style="font-size:12.5px;color:var(--sub);margin-top:6px">구미가 결과를 가져왔어요</p>
+     <p style="font-size:12.5px;color:var(--sub);margin-top:5px">구미가 결과를 가져왔어요</p>
    </div>
-   <div class="compare">
-     <div class="cmp-panel" style="background:linear-gradient(135deg,${Hv.color},${shade(Hv.color)})">
-       <div class="cmp-k">현재 내 매력은</div>
-       <div class="cmp-v">${Hv.name}</div>
-       <div class="cmp-pc">퍼스널컬러 · ${Hv.pc}</div>
-       <div class="cmp-sub">${g(Hv.desc||Hv.one||"").replace(/<[^>]*>/g,"")}</div></div>
-     <div class="cmp-arrow">↓</div>
-     <div class="cmp-panel" style="background:linear-gradient(135deg,${W.color},${shade(W.color)})">
-       <div class="cmp-k">내가 되고 싶은 모습은</div>
-       <div class="cmp-v">${W.name}</div>
-       <div class="cmp-pc">퍼스널컬러 · ${W.pc}</div>
-       <div class="cmp-sub">${g(W.desc||W.one||"").replace(/<[^>]*>/g,"")}</div></div>
+   <div class="carousel" id="rcar" onscroll="carDot()">
+     <div class="cpage"><div class="cp-inner char" style="${charBg(hKey,Hv.color)}">
+       <div class="cp-label">현재 내 매력은</div>
+       <img class="cp-char" src="bg/char_${hKey}.png" alt="" onerror="this.style.display='none'">
+       <div class="cp-type">${Hv.name}</div>
+       <div class="cp-pc">퍼스널컬러 · ${Hv.pc}</div>
+       <div class="cp-desc">${g_plain(Hv.desc||Hv.one||"")}</div>
+     </div></div>
+     <div class="cpage"><div class="cp-inner char" style="${charBg(wKey,W.color)}">
+       <div class="cp-label">내가 되고 싶은 모습은</div>
+       <img class="cp-char" src="bg/char_${wKey}.png" alt="" onerror="this.style.display='none'">
+       <div class="cp-type">${W.name}</div>
+       <div class="cp-pc">퍼스널컬러 · ${W.pc}</div>
+       <div class="cp-desc">${g_plain(W.desc||W.one||"")}</div>
+     </div></div>
+     <div class="cpage"><div class="cp-inner info">
+       <div class="cp-title">🔍 추구미 분포</div>
+       <div style="width:100%">${bars}</div>
+       <div class="sec" style="width:100%"><h3>💛 지금의 나</h3><p>현재 매력은 <b style="color:${Hv.color==='#3E3A45'?'#2B2233':Hv.color}">${Hv.name}</b>에 가까워요. ${g(Hv.desc)}</p></div>
+     </div></div>
+     <div class="cpage"><div class="cp-inner info">
+       <div class="cp-title">💡 추구미로 가는 해설</div>
+       <div class="sec" style="width:100%"><h3>🌉 방향 제안</h3>${bridge}</div>
+       ${gapNote}
+       <div class="sec" style="width:100%"><h3>✨ ${W.name}에 다가가는 첫걸음</h3><p><b>유지·강화:</b> ${wKeep}<br><b>스타일:</b> ${wStyle}</p></div>
+     </div></div>
    </div>
-   <div class="sec"><h3>🔍 추구미 분포</h3>${bars}</div>
-   <div class="sec"><h3>💛 지금의 나</h3><p>현재 매력은 <b style="color:${Hv.color==='#3E3A45'?'#2B2233':Hv.color}">${Hv.name}</b>에 가까워요. ${g(Hv.desc)}</p></div>
-   <div class="sec"><h3>🌉 방향 제안</h3>${bridge}</div>
-   ${gapNote}
-   <div class="sec"><h3>✨ ${W.name}에 다가가는 첫걸음</h3><p><b>유지·강화:</b> ${wKeep}<br><b>스타일:</b> ${wStyle}</p></div>
-   <button class="btn" style="background:#fff;color:var(--accent);border:1.5px solid var(--accent);margin-top:20px" onclick="saveSheet()">📥 내 진단결과 저장하기</button>
-   <button class="btn" style="background:linear-gradient(90deg,#B76BA3,#4A2B5C)" onclick="shareCard()">💌 내 매력+추구미 카드 공유하기</button>
-   <div class="sec"><h3>이 결과, 어땠나요?</h3>
-     <div class="fb"><button id="fbY" onclick="fb(1)">👍 나 같아요</button><button id="fbN" onclick="fb(0)">🤔 갸우뚱해요</button></div>
-     <div id="selfPickBox" style="display:none;margin-top:10px">
-       <p style="font-size:13px;color:var(--sub);margin-bottom:8px">그렇다면, 스스로 생각하는 내 추구미는 뭐에 가까워요? <span style="font-weight:400">(선택)</span></p>
-       <div class="chipgrid">${TKEYS.map(k=>`<div class="chip-item sp-chip" data-k="${k}" onclick="pickSelf('${k}')">${TYPES[k].name}</div>`).join("")}</div>
-     </div>
-     <textarea id="fbTxt" placeholder="추가하고 싶은 질문이나, 이상했던 문항이 있다면 알려주세요! (선택)"></textarea>
-     <button class="btn" onclick="saveLog()">다음 — 피드백 남기기</button>
-     <button class="btn ghost" onclick="location.reload()">처음부터 다시</button></div>
-   <div class="sec" id="waitSec"><h3>🫧 내 추구미로 가는 4주 코칭</h3>
-     <p class="small" style="margin:4px 0 10px;text-align:left">구미가 매주 딱 하나씩, 나에게 맞는 변화 미션을 처방해드려요. 곧 열려요 — 가장 먼저 알림 받기:</p>
-     <input id="wlContact" placeholder="이메일 또는 인스타 아이디" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid var(--line);font-size:16px;box-sizing:border-box"/>
-     <button class="btn" style="margin-top:8px" onclick="joinWaitlist()">코칭 열리면 알려주세요</button></div>
-   <p class="small">사진 진단이 더해지면 훨씬 정확해져요</p>
-  </div>`;
+   <div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+   <div class="swipe-hint">← 좌우로 넘겨서 전체 결과를 확인하세요 →</div>
+   <div class="card" style="margin-top:16px">
+     <button class="btn" style="background:#fff;color:var(--accent);border:1.5px solid var(--accent);margin-top:4px" onclick="saveSheet()">📥 내 진단결과 저장하기 (4장)</button>
+     <button class="btn" style="background:linear-gradient(90deg,#B76BA3,#4A2B5C)" onclick="shareCard()">💌 내 매력+추구미 카드 공유하기</button>
+     <div class="sec"><h3>이 결과, 어땠나요?</h3>
+       <div class="fb"><button id="fbY" onclick="fb(1)">👍 나 같아요</button><button id="fbN" onclick="fb(0)">🤔 갸우뚱해요</button></div>
+       <div id="selfPickBox" style="display:none;margin-top:10px">
+         <p style="font-size:13px;color:var(--sub);margin-bottom:8px">그렇다면, 스스로 생각하는 내 추구미는 뭐에 가까워요? <span style="font-weight:400">(선택)</span></p>
+         <div class="chipgrid">${TKEYS.map(k=>`<div class="chip-item sp-chip" data-k="${k}" onclick="pickSelf('${k}')">${TYPES[k].name}</div>`).join("")}</div>
+       </div>
+       <textarea id="fbTxt" placeholder="추가하고 싶은 질문이나, 이상했던 문항이 있다면 알려주세요! (선택)"></textarea>
+       <button class="btn" onclick="saveLog()">다음 — 피드백 남기기</button>
+       <button class="btn ghost" onclick="location.reload()">처음부터 다시</button></div>
+     <div class="sec" id="waitSec"><h3>🫧 내 추구미로 가는 4주 코칭</h3>
+       <p class="small" style="margin:4px 0 10px;text-align:left">구미가 매주 딱 하나씩, 나에게 맞는 변화 미션을 처방해드려요. 곧 열려요 — 가장 먼저 알림 받기:</p>
+       <input id="wlContact" placeholder="이메일 또는 인스타 아이디" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid var(--line);font-size:16px;box-sizing:border-box"/>
+       <button class="btn" style="margin-top:8px" onclick="joinWaitlist()">코칭 열리면 알려주세요</button></div>
+     <p class="small">사진 진단이 더해지면 훨씬 정확해져요</p>
+   </div>`;
+  carDot();
   window._result={gender:GENDER,want:wr[0][0],wantRank:wr.slice(0,3),have:hr[0][0],extraUsed:extraQ.length};
+}
+function carDot(){ // 결과 캐러셀 현재 페이지 → 도트 표시 동기화
+  const c=$("rcar"); if(!c) return;
+  const i=Math.round(c.scrollLeft/c.clientWidth);
+  document.querySelectorAll(".dots .dot").forEach((d,k)=>d.classList.toggle("on",k===i));
 }
 let fbVal=null, selfPick=null;
 function fb(v){
@@ -796,7 +835,37 @@ function resultModel(){
   const gap=(othersTag&&selfTag&&othersTag!==selfTag)
     ? `스스로는 "${d1.opts[answers["D1"]].t}"이라고 느끼지만, 주변에서는 "${c5.opts[answers["C5"]].t}"라는 말을 들어요. 이 간극이 스타일링의 힌트가 될 수 있어요.` : "";
   const bars=wr.slice(0,4).map(([k,v])=>({name:TYPES[k].name,color:TYPES[k].color,pct:Math.round(v/wTotal*100)}));
-  return {W,Hv,same,wStyle,wKeep,bridge,gap,bars};
+  return {W,Hv,wKey:wr[0][0],hKey:hr[0][0],same,wStyle,wKeep,bridge,gap,bars};
+}
+// 캐릭터 시트(현재/추구미) — 화면 캐러셀 P1/P2와 동일: r1 배경 + 어두운 오버레이 + 구미 캐릭터 + 텍스트
+async function drawCharSheet(label,t,key){
+  const W=1080,H=1500;
+  const c=document.createElement("canvas"); c.width=W; c.height=H;
+  const x=c.getContext("2d");
+  const r1=await loadImg("bg/r1_"+key+".jpg");
+  if(r1) drawCover(x,r1,0,0,W,H); else { x.fillStyle=t.color; x.fillRect(0,0,W,H); }
+  const ov=x.createLinearGradient(0,0,0,H); ov.addColorStop(0,"rgba(28,20,34,.34)"); ov.addColorStop(1,"rgba(28,20,34,.68)"); x.fillStyle=ov; x.fillRect(0,0,W,H);
+  x.textAlign="center"; x.shadowColor="rgba(0,0,0,.5)"; x.shadowBlur=12; x.shadowOffsetY=2;
+  x.fillStyle="rgba(255,255,255,.95)"; x.font="700 42px Pretendard,sans-serif"; x.fillText(label,540,150);
+  const ch=await loadImg("bg/char_"+key+".png");
+  if(ch){ const s=590, sx=540-s/2, sy=195;
+    x.save();
+    x.shadowColor="rgba(0,0,0,.32)"; x.shadowBlur=26; x.shadowOffsetY=8;
+    x.fillStyle="rgba(255,255,255,.55)";
+    if(x.roundRect){ x.beginPath(); x.roundRect(sx,sy,s,s,72); x.fill(); } else x.fillRect(sx,sy,s,s);
+    x.shadowBlur=0; x.shadowOffsetY=0;
+    if(x.roundRect){ x.beginPath(); x.roundRect(sx,sy,s,s,72); x.clip(); }
+    x.drawImage(ch,sx,sy,s,s);
+    x.restore();
+  }
+  x.shadowColor="rgba(0,0,0,.5)"; x.shadowBlur=12; x.shadowOffsetY=2;
+  x.fillStyle="#fff"; x.font="800 112px Pretendard,sans-serif"; x.fillText(t.name,540,900);
+  x.fillStyle="rgba(255,255,255,.96)"; x.font="700 42px Pretendard,sans-serif"; x.fillText("퍼스널컬러 · "+t.pc,540,978);
+  x.fillStyle="rgba(255,255,255,.94)"; x.font="500 38px Pretendard,sans-serif";
+  wrapCenter(x, g_plain(t.desc||t.one||""), 540, 1070, 900, 52, 4);
+  x.shadowBlur=0; x.shadowOffsetY=0;
+  x.fillStyle="rgba(255,255,255,.9)"; x.font="600 32px Pretendard,sans-serif"; x.fillText("추구미즘",540,H-54);
+  return c;
 }
 // 세로 가변 시트: 넉넉한 버퍼에 그린 뒤 실제 사용 높이만큼 잘라 반환
 function makeSheet(draw){
@@ -835,39 +904,45 @@ function canvasToFile(c,name){ return new Promise(res=>c.toBlob(b=>res(new File(
 async function saveSheet(){
   track("save_sheet_click",{});
   const M=resultModel();
-  // 시트1 — 요약: 현재↔추구미 비교 + 추구미 분포 (결과화면 상단부와 동일)
-  const c1=makeSheet(x=>{
-    let y=sheetHeader(x,"나의 진단 결과","");
-    y=sheetPanel(x,"현재 내 매력은",M.Hv,y);
-    x.textAlign="center"; x.fillStyle="#B0A8BC"; x.font="800 46px Pretendard,sans-serif"; x.fillText("↓",540,y+56); y+=90;
-    y=sheetPanel(x,"내가 되고 싶은 모습은",M.W,y); y+=70;
+  // 화면 캐러셀 4페이지와 동일한 4장
+  // 시트1 — 현재 내 매력 (캐릭터)
+  const c1=await drawCharSheet("현재 내 매력은", M.Hv, M.hKey);
+  // 시트2 — 추구미 (캐릭터)
+  const c2=await drawCharSheet("내가 되고 싶은 모습은", M.W, M.wKey);
+  // 시트3 — 추구미 분포 + 지금의 나
+  const c3=makeSheet(x=>{
+    let y=sheetHeader(x,"추구미 분포","");
     x.textAlign="left"; x.fillStyle="#9C4680"; x.font="700 34px Pretendard,sans-serif"; x.fillText("🔍 추구미 분포",90,y); y+=64;
     M.bars.forEach(b=>{ x.textAlign="left"; x.fillStyle="#3A3340"; x.font="600 30px Pretendard,sans-serif"; x.fillText(b.name,90,y+30);
       x.fillStyle="#ECE6F1"; if(x.roundRect){x.beginPath();x.roundRect(320,y+6,560,30,15);x.fill();} else x.fillRect(320,y+6,560,30);
       x.fillStyle=b.color; const w=Math.max(30,Math.round(560*Math.min(1,b.pct/100*2.2))); if(x.roundRect){x.beginPath();x.roundRect(320,y+6,w,30,15);x.fill();} else x.fillRect(320,y+6,w,30);
       x.textAlign="right"; x.fillStyle="#6B6475"; x.font="600 28px Pretendard,sans-serif"; x.fillText(b.pct+"%",990,y+30); y+=56; });
-    y+=20; x.textAlign="center"; x.fillStyle="#9C4680"; x.font="600 30px Pretendard,sans-serif"; x.fillText("추구미즘",540,y+20);
-    return y+20;
+    y+=30; y=sheetSec(x,"💛 지금의 나",`현재 매력은 ${M.Hv.name}에 가까워요. `+g_plain(M.Hv.desc),y);
+    x.textAlign="center"; x.fillStyle="#9C4680"; x.font="600 30px Pretendard,sans-serif"; x.fillText("추구미즘",540,y+10);
+    return y+10;
   });
-  // 시트2 — 방향: 지금의 나 + 방향 제안 + (재미있는 발견) + 첫걸음 (결과화면 하단부와 동일)
-  const c2=makeSheet(x=>{
+  // 시트4 — 해설: 방향 제안 + (재미있는 발견) + 첫걸음
+  const c4=makeSheet(x=>{
     let y=sheetHeader(x,M.W.name+"에 다가가기","이렇게 다가가요");
-    y=sheetSec(x,"💛 지금의 나",`현재 매력은 ${M.Hv.name}에 가까워요. `+g_plain(M.Hv.desc),y);
     y=sheetSec(x,"🌉 방향 제안",M.bridge,y);
     if(M.gap) y=sheetSec(x,"👀 재미있는 발견",M.gap,y);
     y=sheetSec(x,`✨ ${M.W.name}에 다가가는 첫걸음`,"유지·강화: "+g_plain(M.wKeep)+"\n스타일: "+g_plain(M.wStyle),y);
     x.textAlign="center"; x.fillStyle="#9C4680"; x.font="600 30px Pretendard,sans-serif"; x.fillText("추구미즘",540,y+10);
     return y+10;
   });
-  const f1=await canvasToFile(c1,"추구미즘_진단결과_1.png");
-  const f2=await canvasToFile(c2,"추구미즘_진단결과_2.png");
+  const files=await Promise.all([
+    canvasToFile(c1,"추구미즘_1_현재매력.png"),
+    canvasToFile(c2,"추구미즘_2_추구미.png"),
+    canvasToFile(c3,"추구미즘_3_분포.png"),
+    canvasToFile(c4,"추구미즘_4_해설.png")
+  ]);
   // iOS/모바일: navigator.share 로 사진앱 저장 (download 속성 무시 대응)
-  if(navigator.share && navigator.canShare && navigator.canShare({files:[f1,f2]})){
-    try{ await navigator.share({files:[f1,f2], title:"추구미즘 진단결과"}); track("sheet_saved",{via:"native",n:2}); return; }catch(e){ if(e&&e.name==="AbortError"){ track("sheet_saved",{via:"abort"}); return; } }
+  if(navigator.share && navigator.canShare && navigator.canShare({files})){
+    try{ await navigator.share({files, title:"추구미즘 진단결과"}); track("sheet_saved",{via:"native",n:4}); return; }catch(e){ if(e&&e.name==="AbortError"){ track("sheet_saved",{via:"abort"}); return; } }
   }
-  // 데스크톱 폴백: 2장 각각 다운로드
-  [f1,f2].forEach(f=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(f); a.download=f.name; a.click(); });
-  track("sheet_saved",{via:"download",n:2});
+  // 데스크톱 폴백: 4장 각각 다운로드
+  files.forEach(f=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(f); a.download=f.name; a.click(); });
+  track("sheet_saved",{via:"download",n:4});
 }
 function g_plain(t){ return g(t).replace(/<[^>]*>/g,""); }
 function adminExport(){ // 관리자: 이 기기의 누적 로그를 CSV로 다운로드
