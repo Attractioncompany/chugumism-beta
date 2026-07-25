@@ -96,7 +96,7 @@ const SB_URL = "https://qngylynylgqlbidvtbci.supabase.co";
 const SB_KEY = "sb_publishable_bGVbZ31O7OX_rnkLVb0i5Q_SDa8JEri";
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfPlgpjnoS-JO78dDB3D2TM6vnLL59yTYTJ0idnwfgXQzyYCA/viewform?usp=pp_url";
 const FORM_ENTRY = {want:"574367992", have:"395118856", dur:"1863591096", gender:"701863111", raw:"1782704335"};
-const APP_VERSION = "beta_v3.16"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃(이에요/CTA삭제·양쪽퍼컬·풍부한desc)·버튼명변경
+const APP_VERSION = "beta_v3.17"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선)
 // ---- 익명 유저 ID (기기 단위, 개인정보 아님) ----
 let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
@@ -112,42 +112,42 @@ let qShownAt = 0; // 문항 표시 시각(소요 측정)
 const TYPES = {
   romantic:{name:"로맨틱",color:"#F2A9C4",pc:"봄 라이트",
     one:"파스텔빛의 부드럽고 화사한, {여성스러운} 매력이에요.",
-    desc:"어리지도, 성숙하지도 않은 딱 좋은 {여성스러움}이 당신의 힘이에요. 부드러운 곡선과 화사한 파스텔이 잘 어울려요.",
+    desc:"너무 어리지도 성숙하지도 않은, 딱 사랑스러운 {여성스러움}이 강점이에요. 부드러운 곡선과 화사한 파스텔 톤이 특히 잘 어울려요.",
     keep:"굵은 컬 웨이브, 촉촉한 피부 표현, 코랄·핑크 립",keepM:"부드러운 펌, 생기 있는 피부 관리, 밝은 표정",
     style:"쉬폰·풍성한 니트, A라인, 파스텔 핑크·크림",styleM:"부드러운 니트·파스텔 셔츠, 크림·라이트 베이지"},
   pure:{name:"청순청량",color:"#9CC8E8",pc:"여름 라이트",
-    one:"맑고 깨끗한, 청량한 물처럼 투명한 매력이에요.",
-    desc:"꾸미지 않아도 정돈된 맑음이 당신의 힘이에요. 깨끗한 화이트와 시원한 연블루가 잘 받아요.",
+    one:"맑고 투명한, 청량한 물 같은 매력이에요.",
+    desc:"꾸미지 않아도 정돈돼 보이는 맑음이 강점이에요. 깨끗한 화이트와 시원한 연블루가 잘 받아요.",
     keep:"자연스러운 생머리, 맑은 피부 표현, MLBB 립",keepM:"깔끔한 댄디컷, 기본에 충실한 스킨케어",
     style:"셔츠·코튼, 연청, 화이트·연블루 미니멀",styleM:"화이트 셔츠·연청 데님, 깔끔한 미니멀"},
   elegant:{name:"우아한",color:"#B9AFD1",pc:"여름 뮤트",
-    one:"차분하고 귀품 있는, 편안하면서 성숙한 매력이에요.",
-    desc:"차분하게 가라앉은 안정감과 귀품이 당신의 힘이에요. 톤 다운된 색과 흐르는 라인이 잘 어울려요.",
+    one:"차분하고 기품 있는, 편안하면서도 성숙한 매력이에요.",
+    desc:"차분하게 가라앉은 안정감과 기품이 매력이에요. 톤 다운된 색과 흐르는 듯한 라인이 잘 어울려요.",
     keep:"부드러운 C컬, 톤 다운 메이크업, 말린장미 립",keepM:"단정한 가르마 스타일, 은은한 향, 여유 있는 태도",
     style:"슬랙스·가디건·실키 블라우스, 그레이·라벤더",styleM:"슬랙스·가디건·니트, 그레이·소프트 톤"},
   energetic:{name:"에너제틱",color:"#F5B84F",pc:"봄 클리어",
-    one:"통통 튀는 생기와 에너지가 넘치는, 밝고 활동적인 매력이에요.",
-    desc:"쨍하고 발랄한 에너지, 그리고 동안의 생기가 당신의 힘이에요. 선명한 색이 얼굴을 살려줘요.",
+    one:"통통 튀는 생기가 넘치는, 밝고 활동적인 매력이에요.",
+    desc:"쨍하고 발랄한 에너지와 동안의 생기가 강점이에요. 선명한 색이 얼굴을 확 살려줘요.",
     keep:"밝은 컬러 헤어, 생기 블러셔, 쨍한 코랄 립",keepM:"밝은 염색·경쾌한 스타일, 생기 있는 표정",
     style:"캐주얼·봄버·와이드팬츠, 비비드 원색",styleM:"후드·봄버·트랙 캐주얼, 비비드 포인트"},
   gorgeous:{name:"화려함",color:"#B0563B",pc:"가을 딥",
     one:"시선을 사로잡는, 깊고 강렬한 존재감의 매력이에요.",
-    desc:"크고 뚜렷한 이목구비와 무르익은 깊이가 당신의 힘이에요. 진한 색과 존재감 있는 소재가 어울려요.",
+    desc:"크고 뚜렷한 이목구비와 무르익은 깊이가 무기예요. 진한 색과 존재감 있는 소재가 잘 어울려요.",
     keep:"볼륨 웨이브, 음영 메이크업, 버건디·딥레드 립",keepM:"볼륨 펌·장발 스타일, 우디·스파이시 향",
     style:"가죽·새틴·벨벳, 바디라인 핏, 브라운·버건디",styleM:"가죽자켓·프린트, 브라운·버건디 딥톤"},
   classic:{name:"클래식",color:"#C29A6B",pc:"가을 뮤트",
-    one:"단정하고 고급스러운, 신뢰감을 주는 품격 있는 매력이에요.",
-    desc:"튀지 않는 균형과 어른스러운 신뢰감이 당신의 힘이에요. 유행 안 타는 단정함이 가장 잘 어울려요.",
+    one:"단정하고 고급스러운, 신뢰감을 주는 매력이에요.",
+    desc:"튀지 않는 균형과 어른스러운 신뢰감이 강점이에요. 유행 안 타는 단정함이 가장 잘 어울려요.",
     keep:"단정한 미디엄 헤어, 정돈된 메이크업, MLBB·브릭베이지 립",keepM:"단정한 클래식 컷, 클래식 우디 향",
     style:"트렌치·니트 블레이저, 베이지·카멜·브라운",styleM:"트렌치·니트 블레이저·치노, 베이지·카멜"},
   charisma:{name:"카리스마",color:"#3E3A45",pc:"겨울 딥",
-    one:"강한 존재감과 힘이 느껴지는, 시크하고 압도적인 매력이에요.",
-    desc:"직선과 각이 만드는 절제된 강렬함이 당신의 힘이에요. 블랙과 곧은 실루엣이 가장 잘 받아요.",
+    one:"강한 존재감이 느껴지는, 시크하고 압도적인 매력이에요.",
+    desc:"직선과 각이 만드는 절제된 강렬함이 힘이에요. 블랙과 곧은 실루엣이 가장 잘 받아요.",
     keep:"슬릭 헤어, 직선 아이라인, 딥레드 또는 무광 누드 립",keepM:"포마드 슬릭백·투블럭, 절제된 매력",
     style:"각진 어깨·무광 가죽, 직선 실루엣, 블랙",styleM:"올블랙 셋업·무광 레더, 직선 실루엣"},
   chic:{name:"세련된",color:"#3F5C8A",pc:"겨울 스트롱",
-    one:"샤프하고 모던한, 도시적인 스마트함이 느껴지는 매력이에요.",
-    desc:"군더더기 없이 정제된 도시감이 당신의 힘이에요. 선명한 네이비·화이트 대비가 잘 어울려요.",
+    one:"샤프하고 모던한, 도시적인 스마트함이 돋보이는 매력이에요.",
+    desc:"군더더기 없이 정제된 도시감이 강점이에요. 선명한 네이비·화이트 대비가 잘 어울려요.",
     keep:"깔끔한 스트레이트·로우번, 정돈된 포인트, 맑은 레드 립",keepM:"깔끔한 커트, 아쿠아·시트러스 향, 미니멀 시계",
     style:"정장·셔츠·스트레이트핏, 네이비·블랙·화이트",styleM:"수트·셔츠·스트레이트핏, 네이비·화이트"}
 };
@@ -766,40 +766,88 @@ async function shareCard(){
     track("result_shared",{via:"download"});
   },"image/png");
 }
-// #4 내 진단결과 저장하기 — 해설지 2장(현재매력 시트 / 추구미 시트)으로 분리, iOS 저장은 navigator.share
-// 해설 시트 1장 그리기 (흰 배경, 가독성 우선)
-function drawSheet(t,label,extraLabel,extraText){
-  const c=document.createElement("canvas"); c.width=1080; c.height=1600;
-  const x=c.getContext("2d");
-  x.fillStyle="#F8F7FA"; x.fillRect(0,0,1080,1600);
-  x.fillStyle="#fff"; if(x.roundRect){x.beginPath();x.roundRect(60,60,960,1480,32);x.fill();} else x.fillRect(60,60,960,1480);
-  drawGumi(x,540,200,90);
+// #4 내 진단결과 저장하기 — 결과페이지 내용을 그대로 담은 2장(요약/방향)으로 분리, iOS 저장은 navigator.share
+// 결과화면 렌더와 동일한 텍스트 모델 (한 곳에서 계산해 화면·이미지가 어긋나지 않게)
+function resultModel(){
+  const wr=topTwo(scoreWant), hr=topTwo(scoreHave);
+  const W=TYPES[wr[0][0]], Hv=TYPES[hr[0][0]];
+  const wTotal=wr.reduce((s,x)=>s+x[1],0)||1;
+  const same=wr[0][0]===hr[0][0];
+  const wStyle=GENDER==="m"?(W.styleM||W.style):W.style, wKeep=GENDER==="m"?(W.keepM||W.keep):W.keep;
+  const bridge=same
+    ? "추구미와 지금의 매력이 같은 방향이에요! 이미 잘 가고 있어요. 지금 방향을 더 선명하게 다듬으면 돼요."
+    : `지금의 매력은 ${Hv.name}, 되고 싶은 모습은 ${W.name} — 이 격차를 잇는 것이 스타일링의 핵심이에요. ${W.name}의 컬러와 매력을 하나씩 더해보세요: ${wStyle}`;
+  const c5=Q.find(q=>q.id==="C5"), d1=Q.find(q=>q.id==="D1");
+  const othersTag=answers["C5"]!==undefined?c5.opts[answers["C5"]].tag:null;
+  const selfTag=answers["D1"]!==undefined?d1.opts[answers["D1"]].tag:null;
+  const gap=(othersTag&&selfTag&&othersTag!==selfTag)
+    ? `스스로는 "${d1.opts[answers["D1"]].t}"이라고 느끼지만, 주변에서는 "${c5.opts[answers["C5"]].t}"라는 말을 들어요. 이 간극이 스타일링의 힌트가 될 수 있어요.` : "";
+  const bars=wr.slice(0,4).map(([k,v])=>({name:TYPES[k].name,color:TYPES[k].color,pct:Math.round(v/wTotal*100)}));
+  return {W,Hv,same,wStyle,wKeep,bridge,gap,bars};
+}
+// 세로 가변 시트: 넉넉한 버퍼에 그린 뒤 실제 사용 높이만큼 잘라 반환
+function makeSheet(draw){
+  const buf=document.createElement("canvas"); buf.width=1080; buf.height=3200;
+  const x=buf.getContext("2d"); x.fillStyle="#F6F4F8"; x.fillRect(0,0,1080,3200);
+  const endY=draw(x);
+  const h=Math.min(3200, Math.round(endY+70));
+  const out=document.createElement("canvas"); out.width=1080; out.height=h;
+  const ox=out.getContext("2d"); ox.fillStyle="#F6F4F8"; ox.fillRect(0,0,1080,h); ox.drawImage(buf,0,0);
+  return out;
+}
+function sheetHeader(x,title,sub){ // 구미 + 제목, 반환 y
+  drawGumi(x,540,150,72); x.textAlign="center";
+  x.fillStyle="#221A2B"; x.font="800 52px Pretendard,sans-serif"; x.fillText(title,540,300);
+  if(sub){ x.fillStyle="#9C4680"; x.font="600 30px Pretendard,sans-serif"; x.fillText(sub,540,352); return 420; }
+  return 380;
+}
+function sheetPanel(x,label,t,y){ // 결과화면 비교패널과 동일: 라벨/타입명/퍼스널컬러/설명
+  const H=340, g=x.createLinearGradient(80,y,1000,y+H); g.addColorStop(0,t.color); g.addColorStop(1,shade(t.color));
+  x.fillStyle=g; if(x.roundRect){x.beginPath();x.roundRect(80,y,920,H,26);x.fill();} else x.fillRect(80,y,920,H);
   x.textAlign="center";
-  x.fillStyle="#B76BA3"; x.font="700 36px Pretendard,sans-serif"; x.fillText(label, 540, 360);
-  x.fillStyle="#221A2B"; x.font="800 96px Pretendard,sans-serif"; x.fillText(t.name, 540, 470);
-  x.fillStyle="#9C4680"; x.font="700 40px Pretendard,sans-serif"; x.fillText("퍼스널컬러 · "+t.pc, 540, 550);
-  x.strokeStyle="#EADFF0"; x.lineWidth=2; x.beginPath(); x.moveTo(130,620); x.lineTo(950,620); x.stroke();
-  x.textAlign="left"; const L=130; let y=720;
-  const para=(lb,text,big)=>{ if(lb){ x.fillStyle="#B76BA3"; x.font="700 30px Pretendard,sans-serif"; x.fillText(lb,L,y); y+=54; }
-    x.fillStyle="#3A3340"; x.font=(big?"400 40px":"400 34px")+" Pretendard,sans-serif"; y=wrapText(x,text,L,y,820,big?58:50)+64; };
-  para("어떤 매력인가", g_plain(t.desc||t.one||""), true);
-  if(extraText) para(extraLabel, extraText, false);
-  x.textAlign="center"; x.fillStyle="#9C4680"; x.font="600 32px Pretendard,sans-serif"; x.fillText("추구미즘", 540, 1500);
-  return c;
+  x.fillStyle="rgba(255,255,255,.92)"; x.font="600 30px Pretendard,sans-serif"; x.fillText(label,540,y+52);
+  x.fillStyle="#fff"; x.font="800 66px Pretendard,sans-serif"; x.fillText(t.name,540,y+120);
+  x.fillStyle="rgba(255,255,255,.96)"; x.font="700 30px Pretendard,sans-serif"; x.fillText("퍼스널컬러 · "+t.pc,540,y+166);
+  x.fillStyle="rgba(255,255,255,.93)"; x.font="500 27px Pretendard,sans-serif";
+  wrapCenter(x, g_plain(t.desc||t.one||""), 540, y+212, 840, 37, 4);
+  return y+H;
+}
+function sheetSec(x,title,body,y){ // 결과화면 섹션과 동일: 이모지 제목 + 본문 (\n=줄바꿈)
+  x.textAlign="left"; x.fillStyle="#9C4680"; x.font="700 34px Pretendard,sans-serif"; x.fillText(title,90,y); y+=58;
+  x.fillStyle="#3A3340"; x.font="400 34px Pretendard,sans-serif";
+  body.split("\n").forEach(ln=>{ y=wrapText(x,ln,90,y,900,50)+50; });
+  return y+6;
 }
 function canvasToFile(c,name){ return new Promise(res=>c.toBlob(b=>res(new File([b],name,{type:"image/png"})),"image/png")); }
 async function saveSheet(){
   track("save_sheet_click",{});
-  const wr=topTwo(scoreWant), hr=topTwo(scoreHave);
-  const W=TYPES[wr[0][0]], Hv=TYPES[hr[0][0]];
-  const same=wr[0][0]===hr[0][0];
-  const wStyle=GENDER==="m"?(W.styleM||W.style):W.style, wKeep=GENDER==="m"?(W.keepM||W.keep):W.keep;
-  const bridge=same? `추구미와 지금의 매력이 같은 방향이에요. 지금 방향을 더 선명하게 다듬으면 돼요.`
-    : `지금은 ${Hv.name}에서 출발해 ${W.name}으로 — 이 격차를 잇는 게 스타일링의 핵심이에요.`;
-  const c1=drawSheet(Hv,"현재 내 매력은","","");
-  const c2=drawSheet(W,"내가 되고 싶은 모습은","이렇게 다가가요","어디로: "+bridge+"\n유지·강화: "+g_plain(wKeep)+"\n스타일: "+g_plain(wStyle));
-  const f1=await canvasToFile(c1,"추구미즘_현재매력.png");
-  const f2=await canvasToFile(c2,"추구미즘_추구미.png");
+  const M=resultModel();
+  // 시트1 — 요약: 현재↔추구미 비교 + 추구미 분포 (결과화면 상단부와 동일)
+  const c1=makeSheet(x=>{
+    let y=sheetHeader(x,"나의 진단 결과","");
+    y=sheetPanel(x,"현재 내 매력은",M.Hv,y);
+    x.textAlign="center"; x.fillStyle="#B0A8BC"; x.font="800 46px Pretendard,sans-serif"; x.fillText("↓",540,y+56); y+=90;
+    y=sheetPanel(x,"내가 되고 싶은 모습은",M.W,y); y+=70;
+    x.textAlign="left"; x.fillStyle="#9C4680"; x.font="700 34px Pretendard,sans-serif"; x.fillText("🔍 추구미 분포",90,y); y+=64;
+    M.bars.forEach(b=>{ x.textAlign="left"; x.fillStyle="#3A3340"; x.font="600 30px Pretendard,sans-serif"; x.fillText(b.name,90,y+30);
+      x.fillStyle="#ECE6F1"; if(x.roundRect){x.beginPath();x.roundRect(320,y+6,560,30,15);x.fill();} else x.fillRect(320,y+6,560,30);
+      x.fillStyle=b.color; const w=Math.max(30,Math.round(560*Math.min(1,b.pct/100*2.2))); if(x.roundRect){x.beginPath();x.roundRect(320,y+6,w,30,15);x.fill();} else x.fillRect(320,y+6,w,30);
+      x.textAlign="right"; x.fillStyle="#6B6475"; x.font="600 28px Pretendard,sans-serif"; x.fillText(b.pct+"%",990,y+30); y+=56; });
+    y+=20; x.textAlign="center"; x.fillStyle="#9C4680"; x.font="600 30px Pretendard,sans-serif"; x.fillText("추구미즘",540,y+20);
+    return y+20;
+  });
+  // 시트2 — 방향: 지금의 나 + 방향 제안 + (재미있는 발견) + 첫걸음 (결과화면 하단부와 동일)
+  const c2=makeSheet(x=>{
+    let y=sheetHeader(x,M.W.name+"에 다가가기","이렇게 다가가요");
+    y=sheetSec(x,"💛 지금의 나",`현재 매력은 ${M.Hv.name}에 가까워요. `+g_plain(M.Hv.desc),y);
+    y=sheetSec(x,"🌉 방향 제안",M.bridge,y);
+    if(M.gap) y=sheetSec(x,"👀 재미있는 발견",M.gap,y);
+    y=sheetSec(x,`✨ ${M.W.name}에 다가가는 첫걸음`,"유지·강화: "+g_plain(M.wKeep)+"\n스타일: "+g_plain(M.wStyle),y);
+    x.textAlign="center"; x.fillStyle="#9C4680"; x.font="600 30px Pretendard,sans-serif"; x.fillText("추구미즘",540,y+10);
+    return y+10;
+  });
+  const f1=await canvasToFile(c1,"추구미즘_진단결과_1.png");
+  const f2=await canvasToFile(c2,"추구미즘_진단결과_2.png");
   // iOS/모바일: navigator.share 로 사진앱 저장 (download 속성 무시 대응)
   if(navigator.share && navigator.canShare && navigator.canShare({files:[f1,f2]})){
     try{ await navigator.share({files:[f1,f2], title:"추구미즘 진단결과"}); track("sheet_saved",{via:"native",n:2}); return; }catch(e){ if(e&&e.name==="AbortError"){ track("sheet_saved",{via:"abort"}); return; } }
