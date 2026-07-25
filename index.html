@@ -139,7 +139,7 @@ const SB_URL = "https://qngylynylgqlbidvtbci.supabase.co";
 const SB_KEY = "sb_publishable_bGVbZ31O7OX_rnkLVb0i5Q_SDa8JEri";
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfPlgpjnoS-JO78dDB3D2TM6vnLL59yTYTJ0idnwfgXQzyYCA/viewform?usp=pp_url";
 const FORM_ENTRY = {want:"574367992", have:"395118856", dur:"1863591096", gender:"701863111", raw:"1782704335"};
-const APP_VERSION = "beta_v3.22"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
+const APP_VERSION = "beta_v3.23"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
 // ---- 익명 유저 ID (기기 단위, 개인정보 아님) ----
 let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
@@ -678,19 +678,16 @@ function renderResult(){
        <div class="cp-desc">${g_plain(W.desc||W.one||"")}</div>
      </div></div>
      <div class="cpage"><div class="cp-inner info">
-       <div class="cp-title">🔍 추구미 분포</div>
+       <div class="cp-title">🔍 추구미 분포와 방향</div>
        <div style="width:100%">${bars}</div>
        <div class="sec" style="width:100%"><h3>💛 지금의 나</h3><p>현재 매력은 <b style="color:${Hv.color==='#3E3A45'?'#2B2233':Hv.color}">${Hv.name}</b>에 가까워요. ${g(Hv.desc)}</p></div>
-     </div></div>
-     <div class="cpage"><div class="cp-inner info">
-       <div class="cp-title">💡 추구미로 가는 해설</div>
        <div class="sec" style="width:100%"><h3>🌉 방향 제안</h3>${bridge}</div>
        ${gapNote}
        <div class="sec" style="width:100%"><h3>✨ ${W.name}에 다가가는 첫걸음</h3><p><b>유지·강화:</b> ${wKeep}<br><b>스타일:</b> ${wStyle}</p></div>
      </div></div>
      <div class="cpage"><div class="cp-inner info">
        <div class="cp-title">📸 저장하고 공유하기</div>
-       <button class="btn" style="background:#fff;color:var(--accent);border:1.5px solid var(--accent);margin-top:0" onclick="saveSheet()">📥 내 진단결과 저장하기 (4장)</button>
+       <button class="btn" style="background:#fff;color:var(--accent);border:1.5px solid var(--accent);margin-top:0" onclick="saveSheet()">📥 내 진단결과 저장하기 (3장)</button>
        <button class="btn" style="background:linear-gradient(90deg,#B76BA3,#4A2B5C)" onclick="shareCard()">💌 내 매력+추구미 카드 공유하기</button>
        <div class="sec" style="width:100%"><h3>이 결과, 어땠나요?</h3>
          <div class="fb"><button id="fbY" onclick="fb(1)">👍 나 같아요</button><button id="fbN" onclick="fb(0)">🤔 갸우뚱해요</button></div>
@@ -708,7 +705,7 @@ function renderResult(){
        <p class="small">사진 진단이 더해지면 훨씬 정확해져요</p>
      </div></div>
    </div>
-   <div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+   <div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
    </div>`;
   carDot(); fitCarousel();
   window._result={gender:GENDER,want:wr[0][0],wantRank:wr.slice(0,3),have:hr[0][0],extraUsed:extraQ.length};
@@ -929,21 +926,15 @@ async function saveSheet(){
   const c1=await drawCharSheet("현재 내 매력은", M.Hv, M.hKey);
   // 시트2 — 추구미 (캐릭터)
   const c2=await drawCharSheet("내가 되고 싶은 모습은", M.W, M.wKey);
-  // 시트3 — 추구미 분포 + 지금의 나
+  // 시트3 — 분포 + 지금의 나 + 방향 제안 + (재미있는 발견) + 첫걸음 (화면 3페이지와 동일, 3·4 통합)
   const c3=makeSheet(x=>{
-    let y=sheetHeader(x,"추구미 분포","");
+    let y=sheetHeader(x,"추구미 분포와 방향","");
     x.textAlign="left"; x.fillStyle="#9C4680"; x.font="700 34px Pretendard,sans-serif"; x.fillText("🔍 추구미 분포",90,y); y+=64;
     M.bars.forEach(b=>{ x.textAlign="left"; x.fillStyle="#3A3340"; x.font="600 30px Pretendard,sans-serif"; x.fillText(b.name,90,y+30);
       x.fillStyle="#ECE6F1"; if(x.roundRect){x.beginPath();x.roundRect(320,y+6,560,30,15);x.fill();} else x.fillRect(320,y+6,560,30);
       x.fillStyle=b.color; const w=Math.max(30,Math.round(560*Math.min(1,b.pct/100*2.2))); if(x.roundRect){x.beginPath();x.roundRect(320,y+6,w,30,15);x.fill();} else x.fillRect(320,y+6,w,30);
       x.textAlign="right"; x.fillStyle="#6B6475"; x.font="600 28px Pretendard,sans-serif"; x.fillText(b.pct+"%",990,y+30); y+=56; });
     y+=30; y=sheetSec(x,"💛 지금의 나",`현재 매력은 ${M.Hv.name}에 가까워요. `+g_plain(M.Hv.desc),y);
-    x.textAlign="center"; x.fillStyle="#9C4680"; x.font="600 30px Pretendard,sans-serif"; x.fillText("추구미즘",540,y+10);
-    return y+10;
-  });
-  // 시트4 — 해설: 방향 제안 + (재미있는 발견) + 첫걸음
-  const c4=makeSheet(x=>{
-    let y=sheetHeader(x,M.W.name+"에 다가가기","이렇게 다가가요");
     y=sheetSec(x,"🌉 방향 제안",M.bridge,y);
     if(M.gap) y=sheetSec(x,"👀 재미있는 발견",M.gap,y);
     y=sheetSec(x,`✨ ${M.W.name}에 다가가는 첫걸음`,"유지·강화: "+g_plain(M.wKeep)+"\n스타일: "+g_plain(M.wStyle),y);
@@ -953,16 +944,15 @@ async function saveSheet(){
   const files=await Promise.all([
     canvasToFile(c1,"추구미즘_1_현재매력.png"),
     canvasToFile(c2,"추구미즘_2_추구미.png"),
-    canvasToFile(c3,"추구미즘_3_분포.png"),
-    canvasToFile(c4,"추구미즘_4_해설.png")
+    canvasToFile(c3,"추구미즘_3_분포와방향.png")
   ]);
   // iOS/모바일: navigator.share 로 사진앱 저장 (download 속성 무시 대응)
   if(navigator.share && navigator.canShare && navigator.canShare({files})){
-    try{ await navigator.share({files, title:"추구미즘 진단결과"}); track("sheet_saved",{via:"native",n:4}); return; }catch(e){ if(e&&e.name==="AbortError"){ track("sheet_saved",{via:"abort"}); return; } }
+    try{ await navigator.share({files, title:"추구미즘 진단결과"}); track("sheet_saved",{via:"native",n:3}); return; }catch(e){ if(e&&e.name==="AbortError"){ track("sheet_saved",{via:"abort"}); return; } }
   }
-  // 데스크톱 폴백: 4장 각각 다운로드
+  // 데스크톱 폴백: 3장 각각 다운로드
   files.forEach(f=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(f); a.download=f.name; a.click(); });
-  track("sheet_saved",{via:"download",n:4});
+  track("sheet_saved",{via:"download",n:3});
 }
 function g_plain(t){ return g(t).replace(/<[^>]*>/g,""); }
 function adminExport(){ // 관리자: 이 기기의 누적 로그를 CSV로 다운로드
