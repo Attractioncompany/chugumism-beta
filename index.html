@@ -139,7 +139,7 @@ const SB_URL = "https://qngylynylgqlbidvtbci.supabase.co";
 const SB_KEY = "sb_publishable_bGVbZ31O7OX_rnkLVb0i5Q_SDa8JEri";
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfPlgpjnoS-JO78dDB3D2TM6vnLL59yTYTJ0idnwfgXQzyYCA/viewform?usp=pp_url";
 const FORM_ENTRY = {want:"574367992", have:"395118856", dur:"1863591096", gender:"701863111", raw:"1782704335"};
-const APP_VERSION = "beta_v3.23"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
+const APP_VERSION = "beta_v3.24"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
 // ---- 익명 유저 ID (기기 단위, 개인정보 아님) ----
 let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
@@ -520,7 +520,7 @@ function renderQ(){
       const eyeVis=o.svg?(EYEIMG[(GENDER==="m"?"m_":"f_")+o.svg]?`<img class="eye-img" src="${EYEIMG[(GENDER==="m"?"m_":"f_")+o.svg]}" alt="">`:SVGEYES[o.svg]):"";
       html+=`<button class="opt${sel?" sel":""}" onclick="pick('${q.id}',${i})">${eyeVis}${g(o.t)}</button>`;
     });
-    html+= q.multi ? navRow(!hasSel) : (canGoBack()?`<div class="nav-row"><button class="btn back" onclick="goBack()">← 이전</button><button class="btn" ${answers[q.id]===undefined?"disabled":""} onclick="next()">다음</button></div>`:"");
+    html+= navRow(!hasSel); // 단일·복수 모두 '다음' 버튼 통일 (자동 넘김 삭제)
   }
   html+=`</div>`;
   app.innerHTML=html;
@@ -553,8 +553,7 @@ function pick(id,i){
     renderQ();
   } else {
     answers[id]=i;
-    renderQ(); // 선택 표시 + 이전/다음 버튼 노출 (자동 진행 대신, 되돌아보기 가능하게)
-    setTimeout(()=>{ if(answers[id]===i&&Q[idx]&&Q[idx].id===id) next(); },320);
+    renderQ(); // 선택 표시 → '다음' 버튼으로 직접 진행 (자동 넘김 삭제, 대표 요청 2026-07-25)
   }
 }
 function next(){
