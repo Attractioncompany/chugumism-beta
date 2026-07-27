@@ -143,7 +143,7 @@ const SB_URL = "https://qngylynylgqlbidvtbci.supabase.co";
 const SB_KEY = "sb_publishable_bGVbZ31O7OX_rnkLVb0i5Q_SDa8JEri";
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfPlgpjnoS-JO78dDB3D2TM6vnLL59yTYTJ0idnwfgXQzyYCA/viewform?usp=pp_url";
 const FORM_ENTRY = {want:"574367992", have:"395118856", dur:"1863591096", gender:"701863111", raw:"1782704335"};
-const APP_VERSION = "beta_v3.27"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
+const APP_VERSION = "beta_v3.28"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
 // ---- 익명 유저 ID (기기 단위, 개인정보 아님) ----
 let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
@@ -665,7 +665,7 @@ function renderResult(){
   const charBg=(key,col)=>`background-color:${col};background-image:linear-gradient(180deg,rgba(28,20,34,.32),rgba(28,20,34,.64)),url(bg/r1_${key}.jpg)`;
   // 강의 코호트 한정 안내문단 (마케팅 확정 A-2, 2026-07-27) — 진단 갭 이해 개선
   const lectureNote = isLectureCohort()
-    ? `<div class="sec lecture-note" style="width:100%"><p><b>오늘 진단 두 개, 다르게 나왔나요?</b><br>선생님이 본 건 타고난 결이라 잘 안 바뀌고, 여기 나온 건 지금 하고 있는 스타일이라 내일도 바꿀 수 있어요.<br>둘이 다르다면 틀린 게 아니라, 타고난 결을 지금 옷장이 아직 안 살려주고 있다는 뜻이에요 — 채워갈 지점이 보인다는 거죠.</p></div>`
+    ? `<div class="sec lecture-note" style="width:100%"><p><b>오늘 진단 두 개, 다르게 나왔나요?</b><br>선생님이 본 건 타고난 결이라 잘 안 바뀌고, 여기 나온 건 지금 하고 있는 스타일이라 내일도 바꿀 수 있어요.<br>둘이 다르다면, 타고난 결을 지금 옷장이 아직 안 살려주고 있다는 뜻일 수 있어요 — 채워갈 지점이 보인다는 거죠.</p></div>`
     : "";
   app.innerHTML=`
    <div class="result-stage">
@@ -889,7 +889,7 @@ async function drawCharSheet(label,t,key,subline){
   }
   x.shadowColor="rgba(0,0,0,.5)"; x.shadowBlur=12; x.shadowOffsetY=2;
   x.fillStyle="#fff"; x.font="800 112px Pretendard,sans-serif"; x.fillText(t.name,540,900);
-  x.fillStyle="rgba(255,255,255,.96)"; x.font="700 36px Pretendard,sans-serif"; x.fillText(subline||("퍼스널컬러 · "+t.pc),540,978);
+  if(subline){ x.fillStyle="rgba(255,255,255,.96)"; x.font="700 36px Pretendard,sans-serif"; x.fillText(subline,540,978); }
   x.fillStyle="rgba(255,255,255,.94)"; x.font="500 38px Pretendard,sans-serif";
   wrapCenter(x, g_plain(t.desc||t.one||""), 540, 1070, 900, 52, 4);
   x.shadowBlur=0; x.shadowOffsetY=0;
@@ -911,17 +911,6 @@ function sheetHeader(x,title,sub){ // 구미 + 제목, 반환 y
   x.fillStyle="#221A2B"; x.font="800 52px Pretendard,sans-serif"; x.fillText(title,540,300);
   if(sub){ x.fillStyle="#9C4680"; x.font="600 30px Pretendard,sans-serif"; x.fillText(sub,540,352); return 420; }
   return 380;
-}
-function sheetPanel(x,label,t,y){ // 결과화면 비교패널과 동일: 라벨/타입명/퍼스널컬러/설명
-  const H=340, g=x.createLinearGradient(80,y,1000,y+H); g.addColorStop(0,t.color); g.addColorStop(1,shade(t.color));
-  x.fillStyle=g; if(x.roundRect){x.beginPath();x.roundRect(80,y,920,H,26);x.fill();} else x.fillRect(80,y,920,H);
-  x.textAlign="center";
-  x.fillStyle="rgba(255,255,255,.92)"; x.font="600 30px Pretendard,sans-serif"; x.fillText(label,540,y+52);
-  x.fillStyle="#fff"; x.font="800 66px Pretendard,sans-serif"; x.fillText(t.name,540,y+120);
-  x.fillStyle="rgba(255,255,255,.96)"; x.font="700 30px Pretendard,sans-serif"; x.fillText("퍼스널컬러 · "+t.pc,540,y+166);
-  x.fillStyle="rgba(255,255,255,.93)"; x.font="500 27px Pretendard,sans-serif";
-  wrapCenter(x, g_plain(t.desc||t.one||""), 540, y+212, 840, 37, 4);
-  return y+H;
 }
 function sheetSec(x,title,body,y){ // 결과화면 섹션과 동일: 이모지 제목 + 본문 (\n=줄바꿈)
   x.textAlign="left"; x.fillStyle="#9C4680"; x.font="700 34px Pretendard,sans-serif"; x.fillText(title,90,y); y+=58;
