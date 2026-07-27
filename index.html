@@ -139,7 +139,7 @@ const SB_URL = "https://qngylynylgqlbidvtbci.supabase.co";
 const SB_KEY = "sb_publishable_bGVbZ31O7OX_rnkLVb0i5Q_SDa8JEri";
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfPlgpjnoS-JO78dDB3D2TM6vnLL59yTYTJ0idnwfgXQzyYCA/viewform?usp=pp_url";
 const FORM_ENTRY = {want:"574367992", have:"395118856", dur:"1863591096", gender:"701863111", raw:"1782704335"};
-const APP_VERSION = "beta_v3.24"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
+const APP_VERSION = "beta_v3.25"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
 // ---- 익명 유저 ID (기기 단위, 개인정보 아님) ----
 let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
@@ -266,25 +266,25 @@ const Q = [
    {t:"🩶 그레이·라벤더",w:{elegant:2}},{t:"🧡 비비드 원색",w:{energetic:2}},
    {t:"🤎 브라운·버건디·카키",w:{gorgeous:2}},{t:"🟤 베이지·카멜",w:{classic:2}},
    {t:"🖤 블랙",w:{charisma:2}},{t:"💙 네이비·블랙·화이트",w:{chic:2}}]},
- {part:"B",id:"B9",kind:"chips",txt:"옷장에 <b>많은 아이템</b>을 골라주세요 <span style='font-weight:400;color:#6E6478'>(최대 3개)</span>",multi:true,max:3,
+ {part:"B",id:"B9",kind:"chips",txt:"옷장에 <b>많은 옷 종류</b>를 골라주세요 <span style='font-weight:400;color:#6E6478'>(최대 2개)</span>",multi:true,max:2,
   opts:[
-   {t:"프릴·리본 블라우스",w:{romantic:2}},{t:"플라워·파스텔 원피스",w:{romantic:2}},
-   {t:"셔츠",w:{pure:1,chic:1}},{t:"연청 데님",w:{pure:2}},
-   {t:"슬랙스",w:{elegant:1,chic:1}},{t:"가디건",w:{elegant:2}},
-   {t:"풍성한 니트",w:{romantic:1,classic:1}},{t:"후드·맨투맨",w:{energetic:2}},
-   {t:"봄버·트랙 자켓",w:{energetic:2}},{t:"가죽 자켓",w:{gorgeous:1,charisma:1}},
-   {t:"새틴·바디핏 원피스",w:{gorgeous:2}},{t:"트렌치코트",w:{classic:2}},
-   {t:"니트 블레이저",w:{classic:2}},{t:"올블랙 셋업",w:{charisma:2}},
-   {t:"수트·정장",w:{chic:2}},{t:"와이드 팬츠",w:{energetic:1,elegant:1}}],
+   {t:"러블리·페미닌 (프릴·리본·플라워)",w:{romantic:2}},
+   {t:"포근한 니트·가디건",w:{romantic:2}},
+   {t:"깔끔한 셔츠·연청",w:{pure:2}},
+   {t:"가디건·드레이프 셋업 (슬랙스+가디건)",w:{elegant:2}},
+   {t:"캐주얼·액티브 (후드·맨투·봄버)",w:{energetic:2}},
+   {t:"레더·글로시 (가죽·새틴·바디핏)",w:{gorgeous:2}},
+   {t:"트렌치·클래식 (트렌치·니트블레이저)",w:{classic:2}},
+   {t:"테일러드·미니멀 (수트·올블랙 셋업)",w:{chic:2,charisma:1}}],
   optsm:[
-   {t:"부드러운 니트",w:{romantic:2}},{t:"파스텔·라이트 셔츠",w:{romantic:1,pure:1}},
-   {t:"화이트 셔츠",w:{pure:2}},{t:"연청 데님",w:{pure:1,energetic:1}},
-   {t:"슬랙스",w:{elegant:1,chic:1}},{t:"가디건",w:{elegant:2}},
-   {t:"후드·맨투맨",w:{energetic:2}},{t:"봄버·트랙 자켓",w:{energetic:2}},
-   {t:"가죽 자켓",w:{gorgeous:2}},{t:"프린트·개성 셔츠",w:{gorgeous:2}},
-   {t:"트렌치·롱코트",w:{classic:2}},{t:"니트 블레이저·치노",w:{classic:2}},
-   {t:"올블랙 셋업",w:{charisma:2}},{t:"무광 레더·부츠",w:{charisma:2}},
-   {t:"수트·정장",w:{chic:2}},{t:"미니멀 셋업",w:{chic:2}}]},
+   {t:"부드러운 니트·톤 셔츠",w:{romantic:2}},
+   {t:"깔끔한 화이트 셔츠·연청",w:{pure:2}},
+   {t:"슬랙스·가디건 정장룩",w:{elegant:2}},
+   {t:"후드·캐주얼 (후드·봄버·트랙)",w:{energetic:2}},
+   {t:"레더·프린트 (가죽·개성 셔츠)",w:{gorgeous:2}},
+   {t:"트렌치·치노 클래식",w:{classic:2}},
+   {t:"올블랙·무광 레더",w:{charisma:2}},
+   {t:"수트·미니멀 셋업",w:{chic:2}}]},
  {part:"B",id:"B10",kind:"choice",txt:"주로 입는 옷 <b>소재</b>는?",opts:[
    {t:"하늘하늘하고 부드러운 (쉬폰·니트)",w:{romantic:1,elegant:1}},
    {t:"가볍고 깔끔한 (코튼·셔츠·데님)",w:{pure:1,energetic:1,chic:1}},
