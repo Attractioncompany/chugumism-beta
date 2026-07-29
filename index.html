@@ -22,6 +22,8 @@ h1{font-size:26px;line-height:1.3;} h2{font-size:20px;line-height:1.4;margin-bot
 .q-sub{font-size:13px;color:var(--sub);margin-bottom:16px;line-height:1.5;}
 .opt{display:block;width:100%;text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:14px 16px;margin-bottom:10px;font-size:15px;line-height:1.45;cursor:pointer;transition:all .15s;color:var(--ink);}
 .opt:active{transform:scale(.98);} .opt.sel{border-color:var(--accent);background:#F7EBF4;font-weight:600;}
+.opt-chip{display:flex;align-items:center;gap:12px;}
+.swatch{display:inline-block;width:30px;height:30px;border-radius:7px;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,.06);}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
 .mood-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
@@ -143,7 +145,7 @@ const SB_URL = "https://qngylynylgqlbidvtbci.supabase.co";
 const SB_KEY = "sb_publishable_bGVbZ31O7OX_rnkLVb0i5Q_SDa8JEri";
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfPlgpjnoS-JO78dDB3D2TM6vnLL59yTYTJ0idnwfgXQzyYCA/viewform?usp=pp_url";
 const FORM_ENTRY = {want:"574367992", have:"395118856", dur:"1863591096", gender:"701863111", raw:"1782704335"};
-const APP_VERSION = "beta_v3.28"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
+const APP_VERSION = "beta_v3.29"; // 사용자 대면 변경이 실제 배포될 때만 상승 (계측 단일 출처) — v3.11 B7폐지 · v3.12 무드→매력/분위기 용어통일 · v3.13 시작화면 인트로 B안(마케팅 2026-07-23) · v3.16 결과화면3차:저장iOS수정·저장2장분리·공유카드통일레이아웃 · v3.17 저장이미지=결과페이지 미러링(비교·분포·지금의나·방향·첫걸음)·카피점검(귀품→기품·"당신의힘" 반복제거·로맨틱설명 개선) · v3.19 결과화면 캐러셀 4페이지(현재/추구미/분포/해설·좌우슬라이드)·타입별 구미캐릭터+r1배경·저장4장·시작화면 메인이미지 · v3.20 캐릭터 배경투명화(rembg)·버튼 전용 5페이지 분리·모바일 원페이지 최적화(fitCarousel) · v3.18 고객팀검수 반영:Pretendard실로드·성별/mood/시작버튼 선택피드백 강화·칩 최대개수 안내·keep-all 전역·이미지라벨 스크림 강화
 // ---- 익명 유저 ID (기기 단위, 개인정보 아님) ----
 let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
@@ -218,7 +220,7 @@ const Q = [
  {part:"A",id:"A6",kind:"choice",txt:"어느 쪽 분위기에 더 가까워지고 싶어요?",want:true,opts:[
    {t:"부드럽고 편안해 보이는 사람",axis:{soft:1}},{t:"또렷하고 당차 보이는 사람",axis:{deep:1}}]},
  {part:"A",id:"A7",kind:"choice",txt:"옷장을 싹 비우고 새로 채운다면, 어떤 <b>색</b>이 많을까요?",want:true,opts:[
-   {t:"크림·베이지·코랄처럼 온기 있는 색",axis:{warm:1}},{t:"화이트·네이비·블랙처럼 선명한 색",axis:{cool:1}}]},
+   {t:"크림·베이지·코랄처럼 온기 있는 색",axis:{warm:1},chip:{c:["#FFF1DC","#E3CDA9","#F4907F"],b:true}},{t:"화이트·네이비·블랙처럼 선명한 색",axis:{cool:1},chip:{c:["#F5F6F8","#24365C","#14161A"],b:true}}]},
  {part:"A",id:"A8",kind:"choice",txt:"듣고 싶은 첫인상 칭찬은?",want:true,opts:[
    {t:"\u201c분위기가 참 부드러우세요\u201d",axis:{soft:1}},{t:"\u201c존재감이 확실하시네요\u201d",axis:{deep:1}}]},
  {part:"A",id:"A9",kind:"choice",txt:"어떤 순간의 내가 되고 싶어요?",want:true,opts:[
@@ -245,8 +247,8 @@ const Q = [
    {t:"단정한 가르마·클래식 스타일",w:{elegant:1,classic:1}},{t:"밝은 염색·개성 있는 스타일",w:{energetic:2}},
    {t:"볼륨 펌·장발",w:{gorgeous:2}},{t:"포마드 슬릭백·각진 투블럭",w:{charisma:1,chic:1}}]},
  {part:"B",id:"B4",kind:"choice",txt:"<b>머리 색</b>은?",opts:[
-   {t:"밝은 갈색~염색 컬러",w:{energetic:1,romantic:1}},{t:"자연스러운 갈색",w:{pure:1,elegant:1,classic:1}},
-   {t:"진한 갈색~블랙",w:{gorgeous:1,charisma:1,chic:1}}]},
+   {t:"밝은 갈색~염색 컬러",w:{energetic:1,romantic:1},chip:{c:["#A87545","#C9A87C"]}},{t:"자연스러운 갈색",w:{pure:1,elegant:1,classic:1},chip:{c:["#6B4A2F"]}},
+   {t:"진한 갈색~블랙",w:{gorgeous:1,charisma:1,chic:1},chip:{c:["#3A2418","#14100E"]}}]},
  {part:"B",id:"B5",kind:"choice",txt:"평소 <b>메이크업</b> 분위기는?",txtm:"평소 <b>그루밍·관리</b>는?",
   opts:[
    {t:"촉촉하고 화사하게",w:{romantic:2,energetic:1}},{t:"화장기 없는 듯 맑게",w:{pure:2}},
@@ -258,18 +260,18 @@ const Q = [
    {t:"거의 안 해요",w:{}}]},
  {part:"B",id:"B6",kind:"choice",txt:"자주 쓰는 <b>립 컬러</b>는?",txtm:"끌리는 <b>향</b>은?",
   opts:[
-   {t:"🍑 코랄·피치",w:{romantic:1,energetic:1}},{t:"🌷 은은한 핑크 (내 입술색 같은 톤)",w:{pure:1,classic:1}},
-   {t:"🥀 말린장미·로즈브라운",w:{elegant:2}},{t:"🍷 버건디·브릭·딥레드",w:{gorgeous:1,charisma:1}},
-   {t:"🍒 맑은 레드·핑크베이지",w:{chic:2}}],
+   {t:"코랄·피치",w:{romantic:1,energetic:1},chip:{c:["#F5836F","#FBBF9E"]}},{t:"은은한 핑크 (내 입술색 같은 톤)",w:{pure:1,classic:1},chip:{c:["#C98B87"]}},
+   {t:"말린장미·로즈브라운",w:{elegant:2},chip:{c:["#B67B84","#A2726A"]}},{t:"버건디·브릭·딥레드",w:{gorgeous:1,charisma:1},chip:{c:["#7B1E3B","#9E4638","#A8172B"]}},
+   {t:"맑은 레드·핑크베이지",w:{chic:2},chip:{c:["#C21833","#D9A398"]}}],
   optsm:[
    {t:"🌸 달콤하고 포근한 향 (플로럴)",w:{romantic:2}},{t:"🧼 비누·시트러스",w:{pure:2}},
    {t:"🌫️ 은은한 머스크",w:{elegant:1,classic:1}},{t:"🔥 묵직하고 진한 향 (우디·레더)",w:{gorgeous:1,charisma:1}},
    {t:"🌊 깔끔한 아쿠아",w:{chic:2}},{t:"향수는 잘 안 써요",w:{}}]},
  {part:"B",id:"B8",kind:"choice",txt:"옷장에 <b>가장 많은 색</b>은?",opts:[
-   {t:"🌸 파스텔 (핑크·크림)",w:{romantic:2}},{t:"🤍 화이트·연블루·연청",w:{pure:2}},
-   {t:"🩶 그레이·라벤더",w:{elegant:2}},{t:"🧡 비비드 원색",w:{energetic:2}},
-   {t:"🤎 브라운·버건디·카키",w:{gorgeous:2}},{t:"🟤 베이지·카멜",w:{classic:2}},
-   {t:"🖤 블랙",w:{charisma:2}},{t:"💙 네이비·블랙·화이트",w:{chic:2}}]},
+   {t:"파스텔 (핑크·크림)",w:{romantic:2},chip:{c:["#FFC4C4","#FFF1DC"],b:true}},{t:"화이트·연블루·연청",w:{pure:2},chip:{c:["#F4F9FC","#C9E4F5","#A3BFDA"],b:true}},
+   {t:"그레이·라벤더",w:{elegant:2},chip:{c:["#B5B0B5","#B8AFC4"]}},{t:"비비드 원색",w:{energetic:2},chip:{c:["#FF6F61","#FFD34E","#2FC4B2"]}},
+   {t:"브라운·버건디·카키",w:{gorgeous:2},chip:{c:["#6B4A34","#7B1E3B","#5A5A3C"]}},{t:"베이지·카멜",w:{classic:2},chip:{c:["#F1E8D8","#C19A6B"],b:true}},
+   {t:"블랙",w:{charisma:2},chip:{c:["#0F0F0F"]}},{t:"네이비·블랙·화이트",w:{chic:2},chip:{c:["#24365C","#2B2F36","#F5F6F8"],b:true}}]},
  {part:"B",id:"B9",kind:"chips",txt:"옷장에 <b>많은 옷 종류</b>를 골라주세요 <span style='font-weight:400;color:#6E6478'>(최대 2개)</span>",multi:true,max:2,
   opts:[
    {t:"러블리·페미닌 (프릴·리본·플라워)",w:{romantic:2}},
@@ -522,7 +524,8 @@ function renderQ(){
     opts.forEach((o,i)=>{
       const sel=q.multi ? (answers[q.id]||[]).includes(i) : answers[q.id]===i;
       const eyeVis=o.svg?(EYEIMG[(GENDER==="m"?"m_":"f_")+o.svg]?`<img class="eye-img" src="${EYEIMG[(GENDER==="m"?"m_":"f_")+o.svg]}" alt="">`:SVGEYES[o.svg]):"";
-      html+=`<button class="opt${sel?" sel":""}" onclick="pick('${q.id}',${i})">${eyeVis}${g(o.t)}</button>`;
+      const sw=o.chip?`<span class="swatch" style="${chipStyle(o.chip)}"></span>`:"";
+      html+=`<button class="opt${sel?" sel":""}${o.chip?" opt-chip":""}" onclick="pick('${q.id}',${i})">${eyeVis}${sw}${g(o.t)}</button>`;
     });
     html+= navRow(!hasSel); // 단일·복수 모두 '다음' 버튼 통일 (자동 넘김 삭제)
   }
@@ -530,6 +533,14 @@ function renderQ(){
   app.innerHTML=html;
 }
 function shade(hex){const n=parseInt(hex.slice(1),16),r=(n>>16)*0.75|0,g2=((n>>8)&255)*0.75|0,b=(n&255)*0.75|0;return `rgb(${r},${g2},${b})`;}
+function chipStyle(chip){ // 컬러칩 스와치 (단색/좌→우 균등 분할, 밝은 색은 테두리) — 이론 색표 2026-07-27
+  if(!chip||!chip.c) return "";
+  const c=chip.c, n=c.length;
+  let bg;
+  if(n===1) bg=c[0];
+  else { const step=100/n; bg="linear-gradient(90deg,"+c.map((col,i)=>`${col} ${(i*step).toFixed(2)}% ${((i+1)*step).toFixed(2)}%`).join(",")+")"; }
+  return `background:${bg};`+(chip.b?"border:1px solid rgba(0,0,0,.12);":"");
+}
 function pickMood(id,i){
   answers[id]=answers[id]||[];
   const a=answers[id],p=a.indexOf(i);
