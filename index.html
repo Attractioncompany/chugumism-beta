@@ -177,6 +177,7 @@ let UID = null;
 try { UID = localStorage.getItem("czm_uid"); if(!UID){ UID = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); localStorage.setItem("czm_uid", UID); } } catch(e){ UID = 'u'+Date.now(); }
 let USER_ROW_SENT = false;
 async function sbInsert(table, row){
+  if(/^(localhost|127\.|$)/.test(location.hostname)) return; // 로컬 테스트 계측 오염 방지 (2026-08-05)
   const withVer = Object.assign({app_version: APP_VERSION}, row);
   try { await fetch(`${SB_URL}/rest/v1/${table}`, {method:"POST", headers:{"Content-Type":"application/json","apikey":SB_KEY,"Authorization":`Bearer ${SB_KEY}`}, body:JSON.stringify(withVer)}); } catch(e){}
 }
@@ -481,9 +482,40 @@ function renderStart(){
   </div>`;
 }
 function setG(v){ GENDER=v; track("gender_selected",{gender:v}); $("gF").classList.toggle("sel",v==="f"); $("gM").classList.toggle("sel",v==="m"); $("startBtn").disabled=false; const h=$("startHint"); if(h) h.style.display="none"; }
+// 기기군 파싱 (2026-08-05 분석팀 요청 · 로깅 전용 — 판정·UI·가중 불변)
+// device 컬럼 = 층화용 압축값(os_brand형), 상세는 device_info 이벤트 props(jsonb)로
+function deviceFamily(){
+  const ua=navigator.userAgent||"";
+  const d={ua:ua, sw:screen.width, sh:screen.height, dpr:window.devicePixelRatio||1};
+  if(/iPhone|iPod/.test(ua)){ d.os="ios"; d.brand="apple"; d.model="iphone"; }
+  else if(/iPad|Macintosh.*Mobile/.test(ua)){ d.os="ios"; d.brand="apple"; d.model="ipad"; }
+  else if(/Android/.test(ua)){
+    d.os="android";
+    const m=ua.match(/Android [\d.]+;\s*([^);]+)/); d.model=(m&&m[1]||"unknown").trim();
+    d.brand=/SM-|Samsung/i.test(d.model)?"samsung":/Pixel/i.test(d.model)?"google":/Redmi|Mi\s|22\d{2}|23\d{2}/i.test(d.model)?"xiaomi":/LM-|LG-/i.test(d.model)?"lg":"other";
+  }
+  else if(/Macintosh/.test(ua)){ d.os="desktop"; d.brand="mac"; }
+  else if(/Windows/.test(ua)){ d.os="desktop"; d.brand="win"; }
+  else { d.os="unknown"; d.brand="unknown"; }
+  const osv=ua.match(/OS (\d+[_.]\d+)/)||ua.match(/Android ([\d.]+)/); if(osv) d.osv=osv[1].replace(/_/g,".");
+  // 브라우저/웹뷰 — 촬영단 b* 억제가 앱별로 달라 인앱 식별 중요 (이론 v2.8-D)
+  d.browser=/KAKAOTALK/i.test(ua)?"kakaotalk":/Instagram/i.test(ua)?"instagram":/FBAN|FBAV/.test(ua)?"facebook":/NAVER/i.test(ua)?"naver":/Line\//.test(ua)?"line":/whale/i.test(ua)?"whale":/SamsungBrowser/i.test(ua)?"samsung_internet":/EdgiOS|Edg\//.test(ua)?"edge":/FxiOS|Firefox/.test(ua)?"firefox":/CriOS|Chrome/.test(ua)?(/; wv\)/.test(ua)?"webview":"chrome"):/Safari/.test(ua)?"safari":"unknown";
+  const bvPat={kakaotalk:/KAKAOTALK[\s\/]([\d.]+)/,samsung_internet:/SamsungBrowser\/([\d.]+)/,chrome:/(?:CriOS|Chrome)\/([\d.]+)/,webview:/Chrome\/([\d.]+)/,safari:/Version\/([\d.]+)/,edge:/Edg(?:iOS)?\/([\d.]+)/,firefox:/(?:FxiOS|Firefox)\/([\d.]+)/,whale:/Whale\/([\d.]+)/}[d.browser];
+  const bv=bvPat&&ua.match(bvPat); if(bv) d.bver=bv[1];
+  return d;
+}
 function start(){
   phase="survey"; idx=0; startTs=Date.now();
-  if(!USER_ROW_SENT){ USER_ROW_SENT=true; sbInsert("app_users",{id:UID, gender:GENDER, source:(new URLSearchParams(location.search).get("src"))||"direct", device:/Mobi/i.test(navigator.userAgent)?"mobile":"desktop"}); }
+  if(!USER_ROW_SENT){ USER_ROW_SENT=true;
+    const di=deviceFamily();
+    const compact=di.os==="ios"?("ios_"+di.model):di.os==="android"?("android_"+di.brand):di.os==="desktop"?("desktop_"+di.brand):"unknown";
+    sbInsert("app_users",{id:UID, gender:GENDER, source:(new URLSearchParams(location.search).get("src"))||"direct", device:compact});
+    // userAgentData 고엔트로피(안드로이드 크롬만 지원) 병합 후 상세 이벤트 1회 전송 — 미지원/실패 시 기본값만
+    const send=(extra)=>track("device_info",Object.assign({},di,extra||{}));
+    if(navigator.userAgentData&&navigator.userAgentData.getHighEntropyValues){
+      navigator.userAgentData.getHighEntropyValues(["model","platformVersion"]).then(h=>send({uad_model:h.model||"",uad_osv:h.platformVersion||""})).catch(()=>send());
+    } else send();
+  }
   track("session_start",{gender:GENDER});
   render();
 }
