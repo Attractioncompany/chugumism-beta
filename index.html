@@ -720,7 +720,12 @@ function renderResult(){
     window.__diagSaved = true;
     const durS = Math.round((Date.now()-startTs)/1000);
     sbInsert("diagnoses", {user_id:UID, want_type:wr[0][0], have_type:hr[0][0],
-      want_coord:{rank:wr.slice(0,3)}, have_coord:{rank:hr.slice(0,3)},
+      // scores = 8타입 전체 점수 (전략팀 요청 2026-08-08 §1).
+      // top-3만 저장하면 좌표 가중평균이 극단 쪽으로 편향된다 — 빠지는 하위 5개가 대체로 반대 방향이라
+      // 상쇄돼야 할 성분이 통째로 사라진다(한미 리포트 have_sd_mean·gap_role_axis_d에 직접 걸림).
+      // rank는 기존 화면·뷰 호환을 위해 그대로 둔다.
+      want_coord:{rank:wr.slice(0,3), scores:{...scoreWant}},
+      have_coord:{rank:hr.slice(0,3), scores:{...scoreHave}},
       gap: wr[0][0]===hr[0][0]?0:1, extra_used:extraQ.length, duration_sec:durS, answers:answers});
     track("diagnosis_completed",{want:wr[0][0], have:hr[0][0], extra:extraQ.length, dur:durS, gender:GENDER});
   }
